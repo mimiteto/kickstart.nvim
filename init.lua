@@ -599,7 +599,6 @@ require('copilot').setup({
 require('copilot_cmp').setup()
 
 -- Completion
-local cmp = require("cmp")
 
 cmp.setup({
   mapping = {
