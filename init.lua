@@ -90,7 +90,6 @@ require('lazy').setup({
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim',       opts = {} },
-
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
@@ -774,6 +773,7 @@ vim.g.github_enterprise_urls = {
   'https://github.wdf.sap.corp', 'github.tools.sap'
 }
 
+
 -- Line at 100vim.opt.colorcolumn = "100"
 vim.opt.colorcolumn = "100"
 
@@ -828,6 +828,7 @@ vim.api.nvim_create_user_command(
   end,
   { nargs = 1 }
 )
+
 
 -- IBL config
 require("ibl").setup()
