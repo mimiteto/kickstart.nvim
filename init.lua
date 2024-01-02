@@ -325,7 +325,7 @@ vim.wo.wrap = false
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-if vim.fn.has('macunix') then
+if vim.fn.has('macunix') ~= 0 then
   vim.o.clipboard = 'unnamed'
   OPEN_CMD = 'open'
 else
@@ -834,3 +834,4 @@ vim.api.nvim_create_user_command(
 require("ibl").setup()
 
 -- vim: ts=2 sts=2 sw=2 et
+

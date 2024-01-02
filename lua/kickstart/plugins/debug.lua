@@ -40,6 +40,7 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'debugpy'
       },
     }
 
@@ -84,13 +85,18 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
-    require('dap-python').setup('/opt/homebrew/bin/python3')
-    table.insert(require('dap').configurations.python, {
-      type = 'python',
-      request = 'launch',
-      name = 'make run',
-      program = 'make run',
-      -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
-    })
+    if vim.fn.has('macunix') ~= 0 then
+      require('dap-python').setup('/opt/homebrew/bin/python3')
+    else
+      require('dap-python').setup('/usr/bin/python3')
+    end
+
+    -- table.insert(require('dap').configurations.python, {
+    --   type = 'python',
+    --   request = 'launch',
+    --   name = 'make run',
+    --   program = 'make run',
+    --   -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+    -- })
   end,
 }
