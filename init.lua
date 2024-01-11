@@ -94,6 +94,14 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "nvimtools/none-ls.nvim",
+    },
+  },
 
   -- Copilot
   'zbirenbaum/copilot.lua',
@@ -422,8 +430,10 @@ vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = {
-      'go', 'lua', 'python', 'vimdoc', 'vim', 'bash',
+      'go', 'lua', 'python', 'vimdoc', 'vim', 'bash', 'dockerfile', 'yaml', 'json', 'ssh_config'
     },
+    sync_install = false,
+    ignore_install = {},
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
 
@@ -554,6 +564,38 @@ require('which-key').register({
 -- before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup()
+require("null-ls").setup(
+  {
+    -- you must define at least one source for the plugin to work
+    sources = {
+      -- Format
+      require("null-ls").builtins.formatting.shfmt,
+      require("null-ls").builtins.formatting.shfmt.with({
+        args = { "-i", "2", "-ci" },
+      }),
+    }
+  }
+)
+require("mason-null-ls").setup({
+  ensure_installed = {
+    "stylua",
+    "jq",
+    'actionlint',
+    'alex', 'misspell',
+    'golangci_lint', 'gofumpt', 'golines', 'goimports', 'gomodifytags', 'gotests',
+    'pylint', 'mypy', 'pydocstyle', 'autoflake', 'autopep8', 'black', 'vulture', 'debugpy',
+    'docformatter', 'flake8', 'pyflakes', 'pylama', 'pyproject-flake8', --- 'pflake8', 'pycodestyle'
+    'ansible_lint',
+    'markdownlint', 'write_good', 'alex', 'vale',
+    'shellcheck', 'bash-debug-adapter', 'shellharden',
+    'hadolint',
+    -- 'terraform',
+    'yamllint', 'jsonlint',
+    'gitleaks'
+  },
+  automatic_installation = true
+})
+
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -569,6 +611,20 @@ local servers = {
   pyright = {},
   jedi_language_server = {},
   pylsp = {},
+  ansiblels = {},
+  ast_grep = {},
+  autotools_ls = {},
+  bashls = {},
+  -- bzl = {},
+  diagnosticls = {},
+  dockerls = {},
+  golangci_lint_ls = {},
+  helm_ls = {},
+  marksman = {},
+  -- pylyzer = {},
+  pyre = {},
+  terraformls = {},
+  yamlls = {},
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
@@ -585,6 +641,7 @@ local servers = {
 
 -- Setup neovim lua configuration
 require('neodev').setup()
+
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
