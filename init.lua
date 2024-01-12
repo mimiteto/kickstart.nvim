@@ -789,4 +789,7 @@ vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 -- IBL config
 require("ibl").setup()
 
+-- Load Filetype configurations
+require('extend_filetypes')
+
 -- vim: ts=2 sts=2 sw=2 et
