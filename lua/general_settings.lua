@@ -9,7 +9,7 @@ vim.o.hlsearch = true
 vim.wo.number = true
 
 -- Enable mouse mode
-vim.o.mouse = ''
+vim.o.mouse = 'nv'
 
 --- Disable wrap
 vim.wo.wrap = false
