@@ -564,18 +564,26 @@ require('which-key').register({
 -- before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup()
-require("null-ls").setup(
-  {
-    -- you must define at least one source for the plugin to work
-    sources = {
-      -- Format
-      require("null-ls").builtins.formatting.shfmt,
-      require("null-ls").builtins.formatting.shfmt.with({
-        args = { "-i", "2", "-ci" },
-      }),
+
+-- When working - keep the shell settings from the company and initialize null-ls with no opts
+-- at home - prefer shfmt ones
+if vim.fn.has('macunix') ~= 0 then
+  require("null-ls").setup({ sources = {} })
+else
+  require("null-ls").setup(
+    {
+      -- you must define at least one source for the plugin to work
+      sources = {
+        -- Format shell scripts
+        require("null-ls").builtins.formatting.shfmt,
+        require("null-ls").builtins.formatting.shfmt.with({
+          args = { "-i", "8", "-ci" },
+        }),
+      }
     }
-  }
-)
+  )
+end
+
 require("mason-null-ls").setup({
   ensure_installed = {
     "stylua",
