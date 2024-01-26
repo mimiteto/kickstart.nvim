@@ -209,22 +209,10 @@ require('lazy').setup({
       end,
     },
   },
-
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-    end,
-  },
-  -- {
-  --   -- Source for molokayo
-  --   'rafi/awesome-vim-colorschemes',
-  --   config = function()
-  --     vim.cmd.colorscheme 'molokayo'
-  --   end,
-  -- },
+  -- Theme inspired by Atom
+  'navarasu/onedark.nvim',
+  -- Source for molokayo
+  'rafi/awesome-vim-colorschemes',
 
   {
     'nvim-tree/nvim-tree.lua',
@@ -315,6 +303,7 @@ require('lazy').setup({
 }, {})
 
 require("general_settings")
+require("colors")
 
 -- [[ Basic Keymaps ]]
 

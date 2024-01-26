@@ -46,13 +46,11 @@ vim.o.timeoutlen = 300
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
 
 -- Folds
 vim.o.foldenable = false
 
--- Line at 100vim.opt.colorcolumn = "100"
+-- Line at 100
 vim.opt.colorcolumn = "100"
 
 -- Set cursor according modes
