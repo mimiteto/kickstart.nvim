@@ -760,6 +760,7 @@ vim.api.nvim_set_keymap('n', '<Space>', 'za', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>vv', ':Vista!!<CR>', { noremap = true, desc = "[V]iew [Vista]" })
 
 vim.g.vista_fzf_preview = { 'right:50%' }
+vim.g.vista_sidebar_width = 50
 
 -- NVIM Tree
 require("nvim-tree").setup()
