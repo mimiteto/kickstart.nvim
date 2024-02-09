@@ -276,7 +276,7 @@ require('lazy').setup({
       },
     },
   },
-
+  { 'robitx/gp.nvim' },
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -789,5 +789,12 @@ require("ibl").setup()
 
 -- Load Filetype configurations
 require('extend_filetypes')
+
+-- ChatGPT Copilot
+local gp_config = {
+  openai_api_key = { "cat", os.getenv("HOME") .. "/.openai_api_key" },
+}
+
+require('gp').setup(gp_config)
 
 -- vim: ts=2 sts=2 sw=2 et
