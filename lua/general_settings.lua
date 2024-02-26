@@ -10,7 +10,8 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 
 -- Enable mouse mode
-vim.o.mouse = 'nv'
+-- vim.o.mouse = 'nv'
+vim.o.mouse = ''
 
 --- Disable wrap
 vim.wo.wrap = false
