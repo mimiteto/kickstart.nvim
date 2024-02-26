@@ -86,18 +86,20 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
-    if vim.fn.has('macunix') ~= 0 then
-      require('dap-python').setup('/opt/homebrew/bin/python3')
-    else
-      require('dap-python').setup('/usr/bin/python3')
-    end
 
-    -- table.insert(require('dap').configurations.python, {
-    --   type = 'python',
-    --   request = 'launch',
-    --   name = 'make run',
-    --   program = 'make run',
-    --   -- ... more options, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
-    -- })
+    -- Setup python debugger
+    local python_paths = {
+      '.venv/bin/python3',
+      'venv/bin/python3',
+      '/usr/bin/python3',
+      '/usr/local/bin/python3',
+      '/opt/homebrew/bin/python3',
+    }
+    for _, path in ipairs(python_paths) do
+      if vim.fn.executable(path) == 1 then
+        require('dap-python').setup(path)
+        break
+      end
+    end
   end,
 }
