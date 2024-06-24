@@ -594,7 +594,7 @@ require("mason-null-ls").setup({
     'markdownlint', 'write_good', 'alex', 'vale',
     'shellcheck', 'bash-debug-adapter', 'shellharden',
     'hadolint',
-    -- 'terraform',
+    'hclfmt',
     'yamllint', 'jsonlint',
     'gitleaks'
   },
