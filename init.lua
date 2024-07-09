@@ -588,6 +588,7 @@ require("mason-null-ls").setup({
     'actionlint',
     'alex', 'misspell',
     'golangci_lint', 'gofumpt', 'golines', 'goimports', 'gomodifytags', 'gotests',
+    'nilaway', 'revive',
     'pylint', 'mypy', 'pydocstyle', 'autoflake', 'autopep8', 'black', 'vulture', 'debugpy',
     'docformatter', 'flake8', 'pyflakes', 'pylama', 'pyproject-flake8', --- 'pflake8', 'pycodestyle'
     'ansible_lint',
