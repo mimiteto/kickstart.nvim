@@ -1,43 +1,8 @@
 --[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
+https://learnxinyminutes.com/docs/lua/
+https://neovim.io/doc/user/lua-guide.html
+Follow `:help X`
 --]]
--- Set , as the leader key, we are not heretics in this household
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ','
@@ -128,7 +93,88 @@ require('lazy').setup({
       -- Copilot
       'zbirenbaum/copilot-cmp',
     },
+    config = function()
+      -- See `:help cmp`
+      local cmp = require 'cmp'
+      local luasnip = require 'luasnip'
+      luasnip.config.setup {}
+
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        completion = { completeopt = 'menu,menuone,noinsert' },
+
+        -- For an understanding of why these mappings were
+        -- chosen, you will need to read `:help ins-completion`
+        --
+        -- No, but seriously. Please read `:help ins-completion`, it is really good!
+        mapping = cmp.mapping.preset.insert {
+          -- Select the [n]ext item
+          -- ['<C-n>'] = cmp.mapping.select_next_item(),
+          -- Select the [p]revious item
+          -- ['<C-p>'] = cmp.mapping.select_prev_item(),
+
+          -- Scroll the documentation window [b]ack / [f]orward
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+
+          -- Accept ([y]es) the completion.
+          --  This will auto-import if your LSP supports it.
+          --  This will expand snippets if the LSP sent a snippet.
+          -- ['<C-y>'] = cmp.mapping.confirm { select = true },
+
+          -- If you prefer more traditional completion keymaps,
+          -- you can uncomment the following lines
+          ['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+
+          -- Note: Following is disabled - it changes languages
+          -- Manually trigger a completion from nvim-cmp.
+          --  Generally you don't need this, because nvim-cmp will display
+          --  completions whenever it has completion options available.
+          -- ['<C-Space>'] = cmp.mapping.complete {},
+
+          -- Scroll the completion menu
+          ['<S-up>'] = cmp.mapping.scroll_docs(-4),
+          ['<S-down>'] = cmp.mapping.scroll_docs(4),
+
+          -- Think of <c-l> as moving to the right of your snippet expansion.
+          --  So if you have a snippet that's like:
+          --  function $name($args)
+          --    $body
+          --  end
+          --
+          -- <c-l> will move you to the right of each of the expansion locations.
+          -- <c-h> is similar, except moving you backwards.
+          ['<C-l>'] = cmp.mapping(function()
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { 'i', 's' }),
+          ['<C-h>'] = cmp.mapping(function()
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { 'i', 's' }),
+
+          -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+          --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'copilot' },
+          { name = 'ultisnips' },
+          { name = 'luasnip' },
+          { name = 'path' },
+        },
+      }
+    end,
   },
+
 
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',     opts = {} },
@@ -276,7 +322,6 @@ require('lazy').setup({
       },
     },
   },
-  { 'robitx/gp.nvim' },
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -308,37 +353,34 @@ require('lazy').setup({
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
-}, {})
+  -- require 'autopairs', -- Copilot issues
+  -- require 'lint',
+
+}, {
+  ui = {
+    -- If you are using a Nerd Font: set icons to an empty table which will use the
+    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+    icons = vim.g.have_nerd_font and {} or {
+      cmd = '⌘',
+      config = '🛠',
+      event = '📅',
+      ft = '📂',
+      init = '⚙',
+      keys = '🗝',
+      plugin = '🔌',
+      runtime = '💻',
+      require = '🌙',
+      source = '📄',
+      start = '🚀',
+      task = '📌',
+      lazy = '💤 ',
+    },
+  },
+})
 
 require("general_settings")
 require("colors")
-
--- [[ Basic Keymaps ]]
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
--- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-
--- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
-})
+-- require("keymaps")
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -391,17 +433,6 @@ local function live_grep_git_root()
 end
 
 vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
-
--- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
-end, { desc = '[/] Fuzzily search in current buffer' })
 
 local function telescope_live_grep_open_files()
   require('telescope.builtin').live_grep {
@@ -678,65 +709,6 @@ local luasnip = require 'luasnip'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  completion = {
-    completeopt = 'menu,menuone,noinsert',
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'copilot' },
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-  },
-  sorting = {
-    priority_weight = 2,
-    comparators = {
-      require("copilot_cmp.comparators").prioritize,
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-      cmp.config.compare.kind,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-    },
-  }
-}
-
 -- Copilot
 require('copilot').setup({
   panel = { enabled = false },
@@ -763,19 +735,13 @@ cmp.setup({
   }
 })
 
-vim.api.nvim_set_keymap('n', '<Space>', 'za', { noremap = true, silent = true }) -- Indents
 
 -- Configure stuff for VimVista
-vim.api.nvim_set_keymap('n', '<Leader>vv', ':Vista!!<CR>', { noremap = true, desc = "[V]iew [Vista]" })
-
 vim.g.vista_fzf_preview = { 'right:50%' }
 vim.g.vista_sidebar_width = 50
 
 -- NVIM Tree
 require("nvim-tree").setup()
-vim.api.nvim_set_keymap('n', '<Leader>ntt', ':NvimTreeToggle<CR>', { noremap = true, desc = "[N]Vim [T]ree [T]oggle" })
-vim.api.nvim_set_keymap('n', '<Leader>ntT', ':NvimTreeToggle ', { noremap = true, desc = "[N]Vim [T]ree [T]oggle" })
-vim.api.nvim_set_keymap('n', '<Leader>ntff', ':NvimTreeFindFile<CR>', { noremap = true, desc = "[N]Vim [T]ree [T]oggle" })
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 --
@@ -785,25 +751,12 @@ vim.g.github_enterprise_urls = {
   'https://github.wdf.sap.corp', 'github.tools.sap'
 }
 
--- JsonPath
-vim.keymap.set("n", "<Leader>json", ":JsonPath<CR>")
-vim.keymap.set("n", "<Leader>qjson", ":JsonPath ")
-
--- Enable UndoTree
-vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
-
-
 -- IBL config
 require("ibl").setup()
 
 -- Load Filetype configurations
 require('extend_filetypes')
 
--- ChatGPT Copilot
-local gp_config = {
-  openai_api_key = { "cat", os.getenv("HOME") .. "/.openai_api_key" },
-}
-
-require('gp').setup(gp_config)
+require("keymaps")
 
 -- vim: ts=2 sts=2 sw=2 et

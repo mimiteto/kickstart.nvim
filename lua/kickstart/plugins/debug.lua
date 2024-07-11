@@ -88,7 +88,7 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
-
+    local python_path
     -- Setup python debugger
     local python_paths = {
       '.venv/bin/python3',
@@ -99,9 +99,10 @@ return {
     }
     for _, path in ipairs(python_paths) do
       if vim.fn.executable(path) == 1 then
-        require('dap-python').setup(path)
+        pthon_path = path
         break
       end
     end
+    require('dap-python').setup(python_path)
   end,
 }
