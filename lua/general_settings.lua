@@ -33,10 +33,9 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
--- MEH, I want control over case sensitivity
 -- Case-insensitive searching UNLESS \C or capital in search
-vim.o.ignorecase = false
-vim.o.smartcase = false
+vim.o.ignorecase = true
+vim.o.smartcase = true
 
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
