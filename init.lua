@@ -340,6 +340,12 @@ require('lazy').setup({
     },
   },
 
+  -- Show me the scope
+  {
+    "shellRaining/hlchunk.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+  },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -380,7 +386,7 @@ require('lazy').setup({
 
 require("general_settings")
 require("colors")
--- require("keymaps")
+require("hlchunk_conf")
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
