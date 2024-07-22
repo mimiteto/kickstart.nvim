@@ -19,5 +19,10 @@ local function reconfigure_filetype(pattern, filetype)
   )
 end
 
-reconfigure_filetype("pipeline_definitions", "yaml")
-reconfigure_filetype("branch.cfg", "yaml")
+-- Reconfigure the following filetypes on MacOS only
+if vim.fn.has("mac") == 1 then
+  reconfigure_filetype("pipeline_definitions", "yaml")
+  reconfigure_filetype("branch.cfg", "yaml")
+  reconfigure_filetype("config", "yaml")
+  reconfigure_filetype("processing.cfg", "yaml")
+end

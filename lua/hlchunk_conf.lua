@@ -7,7 +7,8 @@ require('hlchunk').setup({
   },
   line_num = {
     enable = true,
-    style = "#3bbf13"
+    style = "#3bbf13",
+    use_treesitter = true,
   },
   blank = {
     enable = true,
