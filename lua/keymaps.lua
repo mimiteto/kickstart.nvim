@@ -61,3 +61,12 @@ vim.keymap.set("n", "<Leader>qjson", ":JsonPath ")
 
 -- Enable UndoTree
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+
+-- CopilotChat.nvim keymaps
+vim.keymap.set('n', '<leader>cc', ':CopilotChat<CR>', { noremap = true, silent = true, desc = '[C]opilot [C]hat' })
+vim.keymap.set('n', '<leader>cq', ':CopilotChatQuick<CR>', { noremap = true, silent = true, desc = '[C]opilot [Q]uick' })
+vim.keymap.set('n', '<leader>cs', ':CopilotChatStop<CR>', { noremap = true, silent = true, desc = '[C]opilot [S]top' })
+vim.keymap.set('n', '<leader>cr', ':CopilotChatRestart<CR>',
+  { noremap = true, silent = true, desc = '[C]opilot [R]estart' })
+vim.keymap.set('n', '<leader>cl', ':CopilotChatLog<CR>', { noremap = true, silent = true, desc = '[C]opilot [L]og' })
+vim.keymap.set('n', '<leader>ch', ':CopilotChatHelp<CR>', { noremap = true, silent = true, desc = '[C]opilot [H]elp' })

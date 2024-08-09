@@ -174,8 +174,31 @@ require('lazy').setup({
       }
     end,
   },
-
-
+  -- Copilot chat
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
+    },
+    opts = {
+      debug = true, -- Enable debugging
+      context = 'buffers',
+      question_header = "## ¯\\_(ツ)_/¯",
+      error_header = "## (╯°□°)╯︵ ┻━┻",
+      answer_header = "## [[°⏠°]]",
+      {
+        "<leader>ccp",
+        function()
+          local actions = require("CopilotChat.actions")
+          require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+        end,
+        desc = "CopilotChat - Prompt actions",
+      }
+    },
+    -- See Commands section for default commands if you want to lazy load on them
+  },
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',     opts = {} },
   -- JQ integration
