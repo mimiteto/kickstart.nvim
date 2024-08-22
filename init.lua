@@ -793,4 +793,7 @@ require('extend_filetypes')
 
 require("keymaps")
 
+-- Fix yamlls trying to lint helm files
+require("override_yaml_helm")
+
 -- vim: ts=2 sts=2 sw=2 et
