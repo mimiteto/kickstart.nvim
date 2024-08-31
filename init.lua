@@ -204,6 +204,7 @@ require('lazy').setup({
   -- JQ integration
   { 'gennaro-tedesco/nvim-jqx', ft = { "json", "yaml" } }, -- Qs with integrations
   { 'mogelbrod/vim-jsonpath',   ft = { "json", "yaml" } }, -- Shows current JSON path
+  { "chrisgrieser/nvim-spider", lazy = true },             -- Better motions for go code
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',

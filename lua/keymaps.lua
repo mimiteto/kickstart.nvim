@@ -70,3 +70,24 @@ vim.keymap.set('n', '<leader>cr', ':CopilotChatRestart<CR>',
   { noremap = true, silent = true, desc = '[C]opilot [R]estart' })
 vim.keymap.set('n', '<leader>cl', ':CopilotChatLog<CR>', { noremap = true, silent = true, desc = '[C]opilot [L]og' })
 vim.keymap.set('n', '<leader>ch', ':CopilotChatHelp<CR>', { noremap = true, silent = true, desc = '[C]opilot [H]elp' })
+
+
+-- Motion understands camelCase
+vim.keymap.set(
+  { "n", "o", "x" },
+  "w",
+  "<cmd>lua require('spider').motion('w')<CR>",
+  { desc = "Spider-w" }
+)
+vim.keymap.set(
+  { "n", "o", "x" },
+  "e",
+  "<cmd>lua require('spider').motion('e')<CR>",
+  { desc = "Spider-e" }
+)
+vim.keymap.set(
+  { "n", "o", "x" },
+  "b",
+  "<cmd>lua require('spider').motion('b')<CR>",
+  { desc = "Spider-b" }
+)
