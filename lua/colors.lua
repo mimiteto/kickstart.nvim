@@ -1,4 +1,4 @@
-function SetColors(colorscheme, line_colorscheme)
+function SetColors(colorscheme, line_colorscheme, do_transparent)
   local lcolorscheme = line_colorscheme or colorscheme
   vim.o.termguicolors = true
   vim.cmd.colorscheme(colorscheme)
@@ -7,12 +7,14 @@ function SetColors(colorscheme, line_colorscheme)
       theme = lcolorscheme,
     },
   }
-
-  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+  if do_transparent then
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+  end
 end
 
 -- SetColors('deus', 'auto')
 -- SetColors('molocayo', 'auto')
 -- SetColors('deep-space', 'auto')
-SetColors('onedark', 'auto')
+-- SetColors('onedark', 'auto')
+SetColors('atom', 'atom', false)
