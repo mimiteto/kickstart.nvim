@@ -17,4 +17,4 @@ end
 -- SetColors('molocayo', 'auto')
 -- SetColors('deep-space', 'auto')
 -- SetColors('onedark', 'auto')
-SetColors('atom', 'atom', false)
+SetColors('atom', 'auto', false)
