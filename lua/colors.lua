@@ -14,7 +14,6 @@ function SetColors(colorscheme, line_colorscheme, do_transparent)
 end
 
 -- SetColors('deus', 'auto')
--- SetColors('molocayo', 'auto')
 -- SetColors('deep-space', 'auto')
 -- SetColors('onedark', 'auto')
-SetColors('atom', 'auto', false)
+SetColors('materialbox', 'auto', false)
