@@ -355,7 +355,38 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
+  -- Note: Vista nd Outline compliment each others.
+  -- In some cases Vista provides better package/module overview
+  -- while Outline provides better file overview
   'liuchengxu/vista.vim',
+  {
+    "hedyhli/outline.nvim",
+    config = function()
+      -- Example mapping to toggle outline
+      vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>",
+        { desc = "Toggle Outline" })
+
+      require("outline").setup {
+        keymaps = {
+          up_and_jump = '<C-p>',
+          down_and_jump = '<C-n>',
+        },
+        symbol_folding = {
+          autofold_depth = 1,
+          auto_unfold = {
+            hovered = true,
+          },
+        },
+        preview_window = {
+          auto_preview = true,
+        },
+        -- Do I need those lines?
+        outline_items = {
+          show_symbol_lineno = true,
+        },
+      }
+    end,
+  },
   {
     "cuducos/yaml.nvim",
     ft = { "yaml" }, -- optional
