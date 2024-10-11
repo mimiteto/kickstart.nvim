@@ -808,9 +808,9 @@ vim.g.vista_fzf_preview = { 'right:50%' }
 vim.g.vista_sidebar_width = 50
 
 -- NVIM Tree
-require("nvim-tree").setup()
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+require("nvim-tree").setup()
 --
 
 -- Set conf for rhubarb
