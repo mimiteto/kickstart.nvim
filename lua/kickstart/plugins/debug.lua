@@ -48,10 +48,15 @@ return {
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
-    vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F6>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F7>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F8>', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<leader>dc', dap.continue, { desc = '[D]ebug: Start/[C]ontinue' })
+    vim.keymap.set('n', '<leader>di', dap.step_into, { desc = '[D]ebug: Step [I]nto' })
+    vim.keymap.set('n', '<leader>do', dap.step_over, { desc = '[D]ebug: Step [O]ver' })
+    vim.keymap.set('n', '<leader>du', dap.step_out, { desc = '[D]ebug: Step O[u]t' })
+    vim.keymap.set('n', '<leader>db', dap.step_back, { desc = '[D]ebug: Step [B]ack' })
+    vim.keymap.set('n', '<leader>dt', dap.terminate, { desc = '[D]ebug: [T]erminate' })
+    vim.keymap.set('n', '<leader>dd', dap.disconnect, { desc = '[D]ebug: [D]isconnect' })
+    vim.keymap.set('n', '<leader>dr', dap.restart, { desc = '[D]ebug: [R]estart' })
+    vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = '[D]ebug: Run [L]ast' })
     vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
@@ -66,15 +71,15 @@ return {
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
       controls = {
         icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
+          pause = '⏸(c)',
+          play = '▶(c)',
+          step_into = '⏎(i)',
+          step_over = '⏭(o)',
+          step_out = '⏮(u)',
+          step_back = 'b(b)',
+          run_last = '▶▶(l)',
+          terminate = '⏹(t)',
+          disconnect = '⏏(d)',
         },
       },
     }
