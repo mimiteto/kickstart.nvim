@@ -283,7 +283,8 @@ require('lazy').setup({
   'navarasu/onedark.nvim',
   -- Source for molokayo
   'rafi/awesome-vim-colorschemes',
-
+  -- Tokyos
+  'folke/tokyonight.nvim',
   {
     'nvim-tree/nvim-tree.lua',
     opts = {},

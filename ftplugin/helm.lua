@@ -1,0 +1,1 @@
+SetColors('tokyonight', 'auto', false)
