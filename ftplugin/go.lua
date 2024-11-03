@@ -25,3 +25,8 @@ vim.keymap.set(
   'n', '<leader>tt', '<cmd>! go test ./... -race; go vet ./... <CR>',
   { desc = 'CLI [T]est [T]est' }
 )
+
+vim.keymap.set(
+  'n', '<leader>tv', '<cmd>! go test ./... -v <CR>',
+  { desc = 'CLI [T]est [V]erbose' }
+)

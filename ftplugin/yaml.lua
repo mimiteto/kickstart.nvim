@@ -1,1 +1,1 @@
-SetColors('atom', 'auto', false)
+SetColors('molokai', 'auto', false)
