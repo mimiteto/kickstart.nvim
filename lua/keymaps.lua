@@ -91,3 +91,9 @@ vim.keymap.set(
   "<cmd>lua require('spider').motion('b')<CR>",
   { desc = "Spider-b" }
 )
+
+-- Git keymaps
+vim.keymap.set('n', '<leader>gs', ':Git<CR>', { desc = '[G]it [S]tatus' })
+vim.keymap.set('n', '<leader>ga', ':Git add %<CR>', { desc = '[G]it [A]dd current file' })
+vim.keymap.set('n', '<leader>gfp', ':Git commit --amend --no-edit<CR>:Git push --force-with-lease<CR>',
+  { desc = '[G]it [F]orce [P]ush current change set' })
