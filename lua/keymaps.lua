@@ -72,26 +72,6 @@ vim.keymap.set('n', '<leader>cl', ':CopilotChatLog<CR>', { noremap = true, silen
 vim.keymap.set('n', '<leader>ch', ':CopilotChatHelp<CR>', { noremap = true, silent = true, desc = '[C]opilot [H]elp' })
 
 
--- Motion understands camelCase
-vim.keymap.set(
-  { "n", "o", "x" },
-  "w",
-  "<cmd>lua require('spider').motion('w')<CR>",
-  { desc = "Spider-w" }
-)
-vim.keymap.set(
-  { "n", "o", "x" },
-  "e",
-  "<cmd>lua require('spider').motion('e')<CR>",
-  { desc = "Spider-e" }
-)
-vim.keymap.set(
-  { "n", "o", "x" },
-  "b",
-  "<cmd>lua require('spider').motion('b')<CR>",
-  { desc = "Spider-b" }
-)
-
 -- Git keymaps
 vim.keymap.set('n', '<leader>gs', ':Git<CR>', { desc = '[G]it [S]tatus' })
 vim.keymap.set('n', '<leader>ga', ':Git add %<CR>', { desc = '[G]it [A]dd current file' })
