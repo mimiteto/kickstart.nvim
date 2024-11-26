@@ -36,7 +36,10 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
-
+  {
+    "folke/zen-mode.nvim",
+    opts = {},
+  },
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
   -- Helm syntax
