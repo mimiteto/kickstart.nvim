@@ -32,6 +32,7 @@ vim.keymap.set(
 )
 
 -- Motion understands camelCase
+require('spider').setup({ skipInsignificantPunctuation = false })
 vim.keymap.set(
   { "n", "o", "x" },
   "w",
