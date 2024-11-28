@@ -40,8 +40,12 @@ require('lazy').setup({
     "folke/zen-mode.nvim",
     opts = {},
   },
+  -- Inc/decr dates
+  'tpope/vim-speeddating',
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+  -- Sessions for neovim
+  'tpope/vim-obsession',
   -- Helm syntax
   'towolf/vim-helm',
 
