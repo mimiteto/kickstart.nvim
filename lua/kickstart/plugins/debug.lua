@@ -22,7 +22,52 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    {
+      'leoluz/nvim-dap-go',
+      setup = function()
+        vim.keymap.set('n', '<leader>tm', function()
+          require('dap-go').debug_test()
+        end, { desc = 'Dap [T]est [M]ethod' })
+
+        vim.keymap.set('n', '<leader>tlm', function()
+          require('dap-go').debug_last_test()
+        end, { desc = 'Dap [T]est [L]ast [M]ethod' })
+
+        vim.keymap.set('n', '<leader>tc', '<cmd>! go test ./... -cover<CR>', { desc = 'CLI [T]est [C]overage' })
+
+        vim.keymap.set('n', '<leader>tc', '<cmd>! go test ./... -race<CR>', { desc = 'CLI [T]est [R]ace' })
+
+        vim.keymap.set('n', '<leader>tc', '<cmd>! go test ./... -bench=.<CR>', { desc = 'CLI [T]est [B]ench' })
+
+        vim.keymap.set('n', '<leader>tt', '<cmd>! go test ./... -race; go vet ./... <CR>', { desc = 'CLI [T]est [T]est' })
+
+        vim.keymap.set('n', '<leader>tv', '<cmd>! go test ./... -v <CR>', { desc = 'CLI [T]est [V]erbose' })
+      end,
+    },
+    {
+      'mfussenegger/nvim-dap-python',
+      setup = function()
+        vim.keymap.set('n', '<leader>tm', function()
+          require('dap-python').test_method()
+        end, { desc = 'Dap [T]est [M]ethod' })
+
+        vim.keymap.set('n', '<leader>tc', function()
+          require('dap-python').test_class()
+        end, { desc = 'Dap [T]est [C]lass' })
+
+        vim.keymap.set('n', '<leader>tf', function()
+          require('dap-python').test_file()
+        end, { desc = 'Dap [T]est [F]ile' })
+
+        vim.keymap.set('n', '<leader>rp', function()
+          vim.cmd '!python %<CR>'
+        end, { desc = '[R]un [P]rogram' })
+
+        vim.keymap.set('n', '<leader>rpa', function()
+          vim.cmd '!python %'
+        end, { desc = '[R]un [P]rogram with [A]rgs' })
+      end,
+    },
   },
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
@@ -95,6 +140,8 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'go-debug-adapter',
+        'debugpy',
       },
     }
 
@@ -144,5 +191,24 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    -- Python specific config
+    local function get_python_path()
+      local default_path = vim.fn.has 'macunix' == 1 and '/opt/homebrew/bin/python3' or '/usr/local/bin/python3'
+      for _, path in ipairs {
+        '.venv/bin/python3',
+        'venv/bin/python3',
+        '/usr/bin/python3',
+        '/usr/local/bin/python3',
+        '/opt/homebrew/bin/python3',
+      } do
+        if vim.fn.executable(path) == 1 then
+          return path
+        end
+      end
+      return default_path
+    end
+
+    require('dap-python').setup(get_python_path())
   end,
 }
