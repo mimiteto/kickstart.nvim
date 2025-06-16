@@ -3,11 +3,11 @@ return {
   build = ':Neorg sync-parsers',
   version = 'v9.2.0',
   dependencies = {
-    { 'nvim-lua/plenary.nvim' },
-    { 'nvim-treesitter/nvim-treesitter' },
-    { 'nvim-treesitter/nvim-treesitter-textobjects' },
+    { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
+    { 'nvim-treesitter/nvim-treesitter', event = 'VeryLazy' },
+    { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'VeryLazy' },
     -- Automatically keep worklog written for today:
-    { 'bottd/neorg-worklog' },
+    { 'bottd/neorg-worklog', event = 'VeryLazy' },
   },
   lazy = false,
   config = function()
