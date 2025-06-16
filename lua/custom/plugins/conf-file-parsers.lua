@@ -1,7 +1,15 @@
 return {
   -- JQ integration
   { 'gennaro-tedesco/nvim-jqx', ft = { 'json', 'yaml' }, event = 'VeryLazy' }, -- Qs with integrations
-  { 'mogelbrod/vim-jsonpath', ft = { 'json', 'yaml' }, event = 'VeryLazy' }, -- Shows current JSON path
+  {
+    'mogelbrod/vim-jsonpath',
+    ft = { 'json', 'yaml' },
+    event = 'VeryLazy',
+    setup = function()
+      -- FormatJson
+      vim.api.nvim_command 'com! FormatJSON %!jq'
+    end,
+  }, -- Shows current JSON path
   { 'towolf/vim-helm', event = 'VeryLazy' },
   {
     'cuducos/yaml.nvim',

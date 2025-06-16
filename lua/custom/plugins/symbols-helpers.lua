@@ -1,5 +1,12 @@
 return {
-  { 'liuchengxu/vista.vim', event = 'VeryLazy' },
+  {
+    'liuchengxu/vista.vim',
+    event = 'VeryLazy',
+    setup = function()
+      vim.g.vista_fzf_preview = { 'right:50%' }
+      vim.g.vista_sidebar_width = 70
+    end,
+  },
   {
     'hedyhli/outline.nvim',
     config = function()
