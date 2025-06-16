@@ -18,6 +18,10 @@ return {
           ':Git commit --amend --no-edit<CR>:Git push --force-with-lease<CR>',
           { desc = '[G]it [F]orce [P]ush current change set' }
         )
+        -- Fugitive config
+        vim.api.nvim_create_user_command('Browse', function(opts)
+          vim.fn.system { OPEN_CMD, opts.fargs[1] }
+        end, { nargs = 1 })
       end,
     },
     'tpope/vim-rhubarb',
