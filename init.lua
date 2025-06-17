@@ -801,16 +801,18 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
-        opts = {},
       },
-      'folke/lazydev.nvim',
+      { 'folke/lazydev.nvim' },
+      { 'Kaiser-Yang/blink-cmp-git' },
+      { 'fang2hou/blink-copilot' },
+      { 'bydlw98/blink-cmp-env' },
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -837,7 +839,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -853,12 +855,82 @@ require('lazy').setup({
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = true, auto_show_delay_ms = 500 },
+        menu = {
+          auto_show = true,
+        },
+        trigger = {
+          show_on_trigger_character = true,
+        },
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev', 'env' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          lsp = {
+            name = 'LSP',
+            module = 'blink.cmp.sources.lsp',
+            opts = {}, -- Passed to the source directly, varies by source
+
+            --- NOTE: All of these options may be functions to get dynamic behavior
+            --- See the type definitions for more information
+            enabled = true, -- Whether or not to enable the provider
+            async = false, -- Whether we should show the completions before this provider returns, without waiting for it
+            timeout_ms = 2000, -- How long to wait for the provider to return before showing completions and treating it as asynchronous
+            transform_items = nil, -- Function to transform the items before they're returned
+            should_show_items = true, -- Whether or not to show the items
+            max_items = nil, -- Maximum number of items to display in the menu
+            min_keyword_length = 0, -- Minimum number of characters in the keyword to trigger the provider
+            -- If this provider returns 0 items, it will fallback to these providers.
+            -- If multiple providers fallback to the same provider, all of the providers must return 0 items for it to fallback
+            fallbacks = {},
+            score_offset = 0, -- Boost/penalize the score of the items
+            override = nil, -- Override the source's functions
+          },
+          copilot = {
+            name = 'copilot',
+            module = 'blink-copilot',
+            score_offset = 100,
+            async = true,
+          },
+          git = {
+            --- Do - https://github.com/Kaiser-Yang/blink-cmp-git?tab=readme-ov-file#how-to-customize-for-enterprise-github-or-gitlab
+            module = 'blink-cmp-git',
+            name = 'Git',
+            opts = {
+              github = {
+                issue = {
+                  get_token = function()
+                    return vim.env.GITHUB_GITHUB
+                  end,
+                },
+                pull_request = {
+                  get_token = function()
+                    return vim.env.GITHUB_GITHUB
+                  end,
+                },
+                mention = {
+                  get_token = function()
+                    return vim.env.GITHUB_GITHUB
+                  end,
+                  get_documentation = function(item)
+                    local default = require('blink-cmp-git.default.github').mention.get_documentation(item)
+                    default.get_token = function()
+                      return vim.env.GITHUB_GITHUB
+                    end
+                    return default
+                  end,
+                },
+              },
+            },
+          },
+          env = {
+            name = 'Env',
+            module = 'blink-cmp-env',
+            opts = {
+              show_documentation_window = false,
+            },
+          },
         },
       },
 
