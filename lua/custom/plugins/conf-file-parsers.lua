@@ -10,7 +10,6 @@ return {
       vim.api.nvim_command 'com! FormatJSON %!jq'
     end,
   }, -- Shows current JSON path
-  { 'towolf/vim-helm', event = 'VeryLazy' },
   {
     'cuducos/yaml.nvim',
     ft = { 'yaml' }, -- optional
