@@ -24,6 +24,11 @@ return {
         vim.api.nvim_create_user_command('Browse', function(opts)
           vim.fn.system { OPEN_CMD, opts.fargs[1] }
         end, { nargs = 1 })
+
+        vim.g.github_enterprise_urls = {
+          'https://github.wdf.sap.corp',
+          'github.tools.sap',
+        }
       end,
     },
     { 'tpope/vim-rhubarb', event = 'VeryLazy' },
