@@ -1,6 +1,35 @@
 return {
   'nvim-neorg/neorg',
-  build = ':Neorg sync-parsers',
+  build = function()
+    -- Check if we're on macOS
+    if vim.fn.has 'mac' == 1 then
+      -- Use LLVM clang on macOS to build the parser
+      local llvm_clang = '/opt/homebrew/opt/llvm/bin/clang'
+
+      -- Check if the LLVM clang exists
+      if vim.fn.filereadable(llvm_clang) == 1 then
+        -- Set the environment variable for the compiler
+        local old_cc = vim.env.CC
+        vim.env.CC = llvm_clang
+
+        -- Install the parser using the proper API call
+        require('nvim-treesitter.install').commands.TSInstallSync['run'] { 'norg' }
+
+        -- Restore original CC if there was one
+        if old_cc then
+          vim.env.CC = old_cc
+        end
+      else
+        -- Try to install LLVM using Homebrew
+        vim.notify('LLVM not found. Attempting to install it with Homebrew...', vim.log.levels.INFO)
+        vim.fn.system 'brew install llvm'
+        vim.notify('LLVM installation attempted. Please restart Neovim to complete Neorg setup.', vim.log.levels.INFO)
+      end
+    else
+      -- Default build for non-macOS
+      require('nvim-treesitter.install').commands.TSInstallSync['run'] { 'norg' }
+    end
+  end,
   version = 'v9.2.0',
   dependencies = {
     { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
