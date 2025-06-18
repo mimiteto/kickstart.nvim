@@ -14,6 +14,22 @@ return {
     -- Append the custom parser path
     vim.opt.runtimepath:append(vim.fn.stdpath 'data' .. '/treesitter')
 
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'norg',
+      callback = function()
+        vim.keymap.set(
+          'n',
+          '<leader><space>',
+          '<Plug>(neorg.qol.todo-items.todo.task-cycle)',
+          { silent = true, buffer = true, noremap = true, desc = '[<space>] change task state' }
+        )
+      end,
+    })
+
+    vim.keymap.set('n', '<leader>ni', ':Neorg index<CR>', { desc = '[N]eorg [I]ndex' })
+    vim.keymap.set('n', '<leader>nr', ':Neorg return<CR>', { desc = '[N]eorg [R]eturn' })
+    vim.keymap.set('n', '<leader>ntoc', ':Neorg toc<CR>', { desc = '[N]eorg [T]able [o]f [C]ontents' })
+
     require('neorg').setup {
       load = {
         ['core.defaults'] = {},

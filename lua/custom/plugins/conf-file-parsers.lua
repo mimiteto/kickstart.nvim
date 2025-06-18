@@ -8,6 +8,8 @@ return {
     setup = function()
       -- FormatJson
       vim.api.nvim_command 'com! FormatJSON %!jq'
+      vim.keymap.set('n', '<Leader>json', ':JsonPath<CR>')
+      vim.keymap.set('n', '<Leader>qjson', ':JsonPath ')
     end,
   }, -- Shows current JSON path
   {
