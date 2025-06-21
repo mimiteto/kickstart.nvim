@@ -23,3 +23,5 @@ if vim.fn.has 'mac' == 1 then
   reconfigure_filetype('config', 'yaml')
   reconfigure_filetype('processing.cfg', 'yaml')
 end
+
+reconfigure_filetype('*.bu', 'yaml')
