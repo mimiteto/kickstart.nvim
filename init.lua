@@ -936,13 +936,13 @@ require('lazy').setup({
       },
     },
     setup = function()
-      vim.keymap.set('n', ']t', function()
+      vim.keymap.set('n', ']T', function()
         require('todo-comments').jump_next()
-      end, { desc = 'Next todo comment' })
+      end, { desc = 'Next [t]odo comment' })
 
-      vim.keymap.set('n', '[t', function()
+      vim.keymap.set('n', '[T', function()
         require('todo-comments').jump_prev()
-      end, { desc = 'Previous todo comment' })
+      end, { desc = 'Previous [t]odo comment' })
     end,
   },
 
