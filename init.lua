@@ -769,7 +769,7 @@ require('lazy').setup({
       { 'folke/lazydev.nvim' },
       { 'Kaiser-Yang/blink-cmp-git' },
       { 'fang2hou/blink-copilot' },
-      { 'bydlw98/blink-cmp-env' },
+      { 'bydlw98/blink-cmp-env', ft = { 'sh', 'bash', 'zsh' } },
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
