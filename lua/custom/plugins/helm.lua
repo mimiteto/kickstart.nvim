@@ -1,7 +1,7 @@
 return {
   'towolf/vim-helm',
   event = 'VeryLazy',
-  setup = function()
+  config = function()
     local utils = {}
 
     -- Function to check if the file is part of a Helm chart

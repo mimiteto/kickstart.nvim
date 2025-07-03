@@ -21,4 +21,4 @@ local function setup_diff_mappings()
   }
 end
 
-return { setup = setup_diff_mappings }
+return { config = setup_diff_mappings }

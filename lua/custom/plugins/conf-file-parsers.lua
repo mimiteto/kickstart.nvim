@@ -5,7 +5,7 @@ return {
     'mogelbrod/vim-jsonpath',
     ft = { 'json', 'yaml' },
     event = 'VeryLazy',
-    setup = function()
+    config = function()
       -- FormatJson
       vim.api.nvim_command 'com! FormatJSON %!jq'
       vim.keymap.set('n', '<Leader>json', ':JsonPath<CR>')

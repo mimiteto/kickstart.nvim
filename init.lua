@@ -935,7 +935,7 @@ require('lazy').setup({
         pattern = [[.*<((KEYWORDS)%(\((user|[iI]583641)\))?):]],
       },
     },
-    setup = function()
+    config = function()
       vim.keymap.set('n', ']T', function()
         require('todo-comments').jump_next()
       end, { desc = 'Next [t]odo comment' })

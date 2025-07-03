@@ -24,7 +24,7 @@ return {
     -- Add your own debuggers here
     {
       'leoluz/nvim-dap-go',
-      setup = function()
+      config = function()
         vim.keymap.set('n', '<leader>tm', function()
           require('dap-go').debug_test()
         end, { desc = 'Dap [T]est [M]ethod' })
@@ -46,7 +46,7 @@ return {
     },
     {
       'mfussenegger/nvim-dap-python',
-      setup = function()
+      config = function()
         vim.keymap.set('n', '<leader>tm', function()
           require('dap-python').test_method()
         end, { desc = 'Dap [T]est [M]ethod' })
