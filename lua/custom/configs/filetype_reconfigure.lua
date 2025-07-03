@@ -25,3 +25,4 @@ if vim.fn.has 'mac' == 1 then
 end
 
 reconfigure_filetype('*.bu', 'yaml')
+reconfigure_filetype('*.tfstate', 'json')
