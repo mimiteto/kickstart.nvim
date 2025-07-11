@@ -612,6 +612,15 @@ require('lazy').setup({
         'yamllint',
         'jsonlint',
         'gitleaks',
+        'sourcery',
+        'trivy',
+        'usort',
+        'yapf',
+        'basedpyright',
+        'pyment',
+        'ruff',
+        'semgrep',
+        'snyk',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
