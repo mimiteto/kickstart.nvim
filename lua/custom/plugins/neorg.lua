@@ -1,3 +1,10 @@
+local function def_workspace()
+  if vim.fn.has 'macunix' ~= 0 then
+    return 'sap'
+  end
+  return 'personal'
+end
+
 return {
   'nvim-neorg/neorg',
   build = function()
@@ -36,7 +43,7 @@ return {
     { 'nvim-treesitter/nvim-treesitter', event = 'VeryLazy' },
     { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'VeryLazy' },
     -- Automatically keep worklog written for today:
-    { 'bottd/neorg-worklog', event = 'VeryLazy' },
+    { 'pysan3/neorg-templates', dependencies = { 'L3MON4D3/LuaSnip' } },
   },
   lazy = false,
   config = function()
@@ -73,12 +80,7 @@ return {
               sap = '~/notes/sap',
               personal = '~/notes/personal',
             },
-            default_workspace = function()
-              if vim.fn.has 'macunix' ~= 0 then
-                return 'sap'
-              end
-              return 'personal'
-            end,
+            default_workspace = def_workspace(),
             index = 'index.norg',
           },
         },
@@ -91,6 +93,18 @@ return {
           config = {
             create_todo_item = true,
             create_todo_parents = true,
+          },
+        },
+        ['external.templates'] = {
+          config = {
+            template_path = vim.fn.stdpath 'config' .. '/templates',
+            template_ext = '.norg',
+          },
+        },
+        ['core.export'] = {
+          config = {
+            export_dir = '~/notes/' .. def_workspace() .. '/export',
+            export_format = 'markdown',
           },
         },
       },

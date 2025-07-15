@@ -1,0 +1,16 @@
+return {}
+-- return {
+--   'cvigilv/esqueleto.nvim',
+--   opts = {
+--     wildcards = {
+--       lookup = {
+--         ['dirname'] = function()
+--           return vim.fn.fnamemodify(vim.fn.expand '%:p:h', ':t')
+--         end,
+--       },
+--     },
+--     advanced = {
+--       ignore = { 'fugitive://*' },
+--     },
+--   },
+-- }

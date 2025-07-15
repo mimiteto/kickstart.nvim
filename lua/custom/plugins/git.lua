@@ -41,7 +41,9 @@ return {
         { 'nvim-tree/nvim-web-devicons', event = 'VeryLazy' },
       },
       config = function()
-        require('octo').setup()
+        require('octo').setup {
+          use_local_fs = true,
+        }
       end,
       event = 'VeryLazy',
     },
