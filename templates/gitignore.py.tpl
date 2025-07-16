@@ -1,3 +1,4 @@
+;; gitignore
 *.egg-info/
 *.egg-info
 .venv

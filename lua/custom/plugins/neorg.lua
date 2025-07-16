@@ -42,8 +42,6 @@ return {
     { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
     { 'nvim-treesitter/nvim-treesitter', event = 'VeryLazy' },
     { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'VeryLazy' },
-    -- Automatically keep worklog written for today:
-    { 'pysan3/neorg-templates', dependencies = { 'L3MON4D3/LuaSnip' } },
   },
   lazy = false,
   config = function()
@@ -93,12 +91,6 @@ return {
           config = {
             create_todo_item = true,
             create_todo_parents = true,
-          },
-        },
-        ['external.templates'] = {
-          config = {
-            template_path = vim.fn.stdpath 'config' .. '/templates',
-            template_ext = '.norg',
           },
         },
         ['core.export'] = {

@@ -1,7 +1,8 @@
+;; make
 PYTHON := python3
 VENV_DIR := .venv
 VENV_BIN := $(VENV_DIR)/bin
-APP := ${dirname}
+APP := {{_dirname_}}
 PROJECT_DIR := src/$(APP)
 
 help:
@@ -13,9 +14,6 @@ help:
 	@echo "  make lint                - Run linting checks"
 	@echo "  make format              - Format code using black and isort"
 	@echo "  make build               - Build distribution packages"
-	@echo "  make run-k8s-file        - Run the package about k8s versions"
-	@echo "  make run-gh-releases     - Run the package about GitHub releases"
-	@echo "  make run-k8s-resources   - Run the package about k8s resources"
 
 $(VENV_DIR):
 	$(PYTHON) -m venv $(VENV_DIR)

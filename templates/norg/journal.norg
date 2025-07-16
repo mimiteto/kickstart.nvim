@@ -1,5 +1,0 @@
-* {TODAY}
-  {{:{YESTERDAY}:}}[Yesterday] - {{:{TOMORROW}:}}[Tomorrow]
-
-** Taks list from yesterday
-   - {CURSOR}
