@@ -42,6 +42,9 @@ return {
     { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
     { 'nvim-treesitter/nvim-treesitter', event = 'VeryLazy' },
     { 'nvim-treesitter/nvim-treesitter-textobjects', event = 'VeryLazy' },
+    { 'benlubas/neorg-interim-ls', event = 'VeryLazy' },
+    { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
+    { 'nvim-neorg/neorg-telescope', event = 'VeryLazy' },
   },
   lazy = false,
   config = function()
@@ -63,6 +66,8 @@ return {
     vim.keymap.set('n', '<leader>ni', ':Neorg index<CR>', { desc = '[N]eorg [I]ndex' })
     vim.keymap.set('n', '<leader>nr', ':Neorg return<CR>', { desc = '[N]eorg [R]eturn' })
     vim.keymap.set('n', '<leader>ntoc', ':Neorg toc<CR>', { desc = '[N]eorg [T]able [o]f [C]ontents' })
+    vim.keymap.set('n', '<leader>nsh', '<Plug>(neorg.telescope.search_headings)', { desc = '[N]eorg [S]earch [H]eadings' })
+    vim.keymap.set('n', '<leader>nsl', '<Plug>(neorg.telescope.search_linkable)', { desc = '[N]eorg [S]earch [L]inkable' })
 
     require('neorg').setup {
       load = {
@@ -98,6 +103,19 @@ return {
             export_dir = '~/notes/' .. def_workspace() .. '/export',
             export_format = 'markdown',
           },
+        },
+        ['core.completion'] = {
+          config = { engine = { module_name = 'external.lsp-completion' } },
+        },
+        ['core.integrations.telescope'] = {
+          config = {
+            insert_file_link = {
+              show_title_preview = true,
+            },
+          },
+        },
+        ['external.interim-ls'] = {
+          config = { categories = true },
         },
       },
     }
