@@ -46,6 +46,14 @@ return {
     { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
     { 'nvim-neorg/neorg-telescope', event = 'VeryLazy' },
     { 'bottd/neorg-worklog' },
+    {
+      'setupyourskills/dew-smartlink',
+      ft = 'norg',
+      dependencies = {
+        'setupyourskills/neorg-dew',
+        'setupyourskills/dew-crumb',
+      },
+    },
   },
   lazy = false,
   config = function()
@@ -130,6 +138,13 @@ return {
             heading = 'Worklog',
             -- (Optional) Title for "default" workspace
             default_workspace_title = 'default',
+          },
+        },
+        ['external.neorg-dew'] = {},
+        ['external.dew-smartlink'] = {},
+        ['external.dew-crumb'] = {
+          config = {
+            enabled = true, -- Enable or disable the module on startup
           },
         },
       },

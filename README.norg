@@ -1,0 +1,18 @@
+* NeoVim Setup
+
+** Additionals
+   ~ Install `gh`
+   @code bash
+brew install gh
+# or
+sudo dnf install -y gh
+   @end
+   
+   ~ Install `luarocks` and `ticktoken_core`
+   @code bash
+sudo luarocks install --lua-version 5.4 tiktoken_core
+   @end
+
+** Further readings
+   - https://github.com/hardfau1t/norgmill
+   - Install {https://github.com/bottd/vite-plugin-norg} 

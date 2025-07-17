@@ -20,9 +20,6 @@ return {
       { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
       { 'echasnovski/mini.nvim', version = '*' },
     },
-    build = function()
-      os.execute 'sudo luarocks install --lua-version 5.4 tiktoken_core'
-    end,
     config = function()
       require('CopilotChat').setup {
         debug = false, -- Enable debugging

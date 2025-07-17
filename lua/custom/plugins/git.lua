@@ -51,13 +51,4 @@ return {
   config = function()
     require('litee.gh').setup()
   end,
-  build = function()
-    if not vim.fn.executable 'gh' then
-      if vim.has 'macunix' then
-        os.execute 'brew install gh'
-      else
-        os.execute 'sudo dnf install -y gh'
-      end
-    end
-  end,
 }
