@@ -14,12 +14,14 @@ return {
       config = function()
         vim.keymap.set('n', '<leader>gs', ':Git<CR>', { desc = '[G]it [S]tatus' })
         vim.keymap.set('n', '<leader>ga', ':Git add %<CR>', { desc = '[G]it [A]dd current file' })
-        vim.keymap.set(
-          'n',
-          '<leader>gfp',
-          ':Git commit --amend --no-edit<CR>:Git push --force-with-lease<CR>',
-          { desc = '[G]it [F]orce [P]ush current change set' }
-        )
+        vim.api.nvim_create_user_command('Gpf', function(opts)
+          local cmd = 'Git push --force-with-lease'
+          local is_u = vim.tbl_contains(vim.split(opts.args, ' ', { trimempty = true }), '-u')
+          if is_u then
+            cmd = cmd .. ' -u'
+          end
+          vim.cmd(cmd)
+        end, { nargs = '*', desc = 'git push --force-with-lease [-u]' })
         -- Fugitive config
         vim.api.nvim_create_user_command('Browse', function(opts)
           vim.fn.system { OPEN_CMD, opts.fargs[1] }

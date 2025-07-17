@@ -41,9 +41,6 @@ vim.opt.colorcolumn = '100'
 vim.keymap.set('n', 'Q', '<nop>')
 vim.keymap.set('n', 'W', '<nop>')
 
--- Bind vball
-vim.keymap.set('n', '<Leader>vball', ':vertical ball<CR>')
-
 -- Correct tabstop
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -75,3 +72,7 @@ vim.o.scrolloff = 8
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+vim.api.nvim_create_user_command('Ball', function(opts)
+  vim.cmd('vertical ball' .. (opts.args ~= '' and ' ' .. opts.args or ''))
+end, { nargs = '?', desc = 'Open buffer list in vertical split' })
