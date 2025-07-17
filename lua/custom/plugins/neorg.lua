@@ -45,6 +45,7 @@ return {
     { 'benlubas/neorg-interim-ls', event = 'VeryLazy' },
     { 'nvim-lua/plenary.nvim', event = 'VeryLazy' },
     { 'nvim-neorg/neorg-telescope', event = 'VeryLazy' },
+    { 'bottd/neorg-worklog' },
   },
   lazy = false,
   config = function()
@@ -116,6 +117,15 @@ return {
         },
         ['external.interim-ls'] = {
           config = { categories = true },
+        },
+        ['external.worklog'] = {
+          -- default config
+          config = {
+            -- (Optional) Title for worklog in journal
+            heading = 'Worklog',
+            -- (Optional) Title for "default" workspace
+            default_workspace_title = 'default',
+          },
         },
       },
     }

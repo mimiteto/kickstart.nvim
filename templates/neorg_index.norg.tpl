@@ -5,8 +5,8 @@ description: {{_variable_}}
 categories: [
 	{{_variable_}}
 ]
-created: {{_lua:os.date("%y/%m/%d")_}}
-updated: {{_lua:os.date("%y/%m/%d")_}}
+created: {{_lua:os.date("!%Y-%m-%dT%H:%M:%S") .. os.date("%z")_}}
+updated: {{_lua:os.date("!%Y-%m-%dT%H:%M:%S") .. os.date("%z")_}}
 @end
 * {{_dirname_}}
 
