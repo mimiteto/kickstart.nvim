@@ -97,6 +97,11 @@ return {
           config = {
             create_todo_item = true,
             create_todo_parents = true,
+            order_with_children = {
+              'undone',
+              'done',
+              'pending',
+            },
           },
         },
         ['core.export'] = {
