@@ -14,5 +14,8 @@ sudo luarocks install --lua-version 5.4 tiktoken_core
    @end
 
 ** Further readings
-   - https://github.com/hardfau1t/norgmill
-   - Install {https://github.com/bottd/vite-plugin-norg} 
+   ~ Neorg
+   -- {https://github.com/hardfau1t/norgmill}[norg -> html render]
+   -- {https://github.com/bottd/vite-plugin-norg}[Another norg -> html render]
+   -- {https://github.com/phenax/neorg-hop-extras}[Link overhaul]]
+   -- {https://github.com/juniorsundar/neorg-extras}[Tasker]
