@@ -92,7 +92,7 @@ return {
     },
     keys = {
       { '<leader>tt', '<cmd>Telescope find_template type=insert<CR>', desc = '[T]template [t]this' },
-      { '<leader>tT', '<cmd>Telescope find_template type=insert filter_ft=false<CR>', desc = '[T]emplate [T]his regardless' },
+      { '<leader>tT', '<cmd>Telescope find_template filter_ft=false type=insert<CR>', desc = '[T]emplate [T]his regardless' },
     },
     cmd = { 'Template', 'TemProject' },
     config = setup,
