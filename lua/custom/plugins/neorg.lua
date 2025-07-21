@@ -5,6 +5,12 @@ local function def_workspace()
   return 'personal'
 end
 
+local function split_neorg(type, opts)
+  vim.cmd(type)
+  vim.api.nvim_set_current_buf(vim.api.nvim_create_buf(false, true))
+  vim.cmd('Neorg ' .. opts.args)
+end
+
 return {
   'nvim-neorg/neorg',
   build = function()
@@ -77,6 +83,14 @@ return {
     vim.keymap.set('n', '<leader>ntoc', ':Neorg toc<CR>', { desc = '[N]eorg [T]able [o]f [C]ontents' })
     vim.keymap.set('n', '<leader>nsh', '<Plug>(neorg.telescope.search_headings)', { desc = '[N]eorg [S]earch [H]eadings' })
     vim.keymap.set('n', '<leader>nsl', '<Plug>(neorg.telescope.search_linkable)', { desc = '[N]eorg [S]earch [L]inkable' })
+
+    vim.api.nvim_create_user_command('VSNeorg', function(opts)
+      split_neorg('vsplit', opts)
+    end, { nargs = '?', desc = 'Open Neorg in a vertical split' })
+
+    vim.api.nvim_create_user_command('SNeorg', function(opts)
+      split_neorg('split', opts)
+    end, { nargs = '?', desc = 'Open Neorg in a split' })
 
     require('neorg').setup {
       load = {
