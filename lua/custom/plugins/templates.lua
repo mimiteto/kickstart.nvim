@@ -32,6 +32,26 @@ local function get_next_working_date()
   return os.date('%Y/%m/%d', next_time)
 end
 
+-- Decide on the previous date:
+-- if current time is past 16:30 - return current date
+-- otherwise return tomorrows date
+local function decide_on_previous_date()
+  if os.date '%H:%M' > '16:30' then
+    return os.date '%Y/%m/%d'
+  else
+    return get_prev_working_date()
+  end
+end
+
+-- Decide on the previous date
+local function decide_on_next_date()
+  if os.date '%H:%M' > '16:30' then
+    return get_next_working_date()
+  else
+    return os.date '%Y/%m/%d'
+  end
+end
+
 -- Get dir content as a list of strings
 local function get_dir_content(path)
   local content = {}
@@ -69,8 +89,8 @@ local function setup()
   tpl.register('{{_dirname_}}', function()
     return vim.fn.fnamemodify(vim.fn.expand '%:p:h', ':t')
   end)
-  tpl.register('{{_prev_working_date_}}', get_prev_working_date)
-  tpl.register('{{_next_working_date_}}', get_next_working_date)
+  tpl.register('{{_prev_working_date_}}', decide_on_previous_date)
+  tpl.register('{{_next_working_date_}}', decide_on_next_date)
 
   -- Next two render improperly, `templates` can't render correctly for the life of it
   tpl.register('{{_norg_linkified_dir_content_}}', function()
