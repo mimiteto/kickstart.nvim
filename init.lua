@@ -616,7 +616,6 @@ require('lazy').setup({
         'trivy',
         'usort',
         'yapf',
-        'basedpyright',
         'pyment',
         'ruff',
         'semgrep',
