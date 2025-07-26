@@ -546,6 +546,7 @@ require('lazy').setup({
         -- rust_analyzer = {},
         -- tsserver = {},
         -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+        systemd_ls = {},
 
         lua_ls = {
           Lua = {
@@ -620,6 +621,7 @@ require('lazy').setup({
         'ruff',
         'semgrep',
         'snyk',
+        'systemdlint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -714,7 +716,7 @@ require('lazy').setup({
       { 'folke/lazydev.nvim' },
       { 'Kaiser-Yang/blink-cmp-git' },
       { 'fang2hou/blink-copilot' },
-      { 'bydlw98/blink-cmp-env', ft = { 'sh', 'bash', 'zsh' } },
+      -- { 'bydlw98/blink-cmp-env', ft = { 'sh', 'bash', 'zsh' } },
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
@@ -766,7 +768,8 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev', 'env' },
+        -- default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev', 'env' },
+        default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
           lsp = {
@@ -826,13 +829,13 @@ require('lazy').setup({
               },
             },
           },
-          env = {
-            name = 'Env',
-            module = 'blink-cmp-env',
-            opts = {
-              show_documentation_window = false,
-            },
-          },
+          -- env = {
+          --   name = 'Env',
+          --   module = 'blink-cmp-env',
+          --   opts = {
+          --     show_documentation_window = false,
+          --   },
+          -- },
         },
       },
 
