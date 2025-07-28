@@ -30,4 +30,4 @@ updated: {{_lua:os.date("%y/%m/%dT%H:%M:%S")_}}
 * Leftovers
 
 
-* Tomorrow {:$/journal/{{_next_working_date_}}}
+* Tomorrow {:$/journal/{{_next_working_date_}}:}

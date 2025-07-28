@@ -14,6 +14,8 @@ updated: {{_lua:os.date("%y/%m/%dT%H:%M:%S")_}}
 
 
 * Journal for {{_lua:os.date("%y/%m/%d")_}}
+** ToDos:
+~ {:$/tasks/compliance-reporting.norg}
 
 
 * Leftovers
