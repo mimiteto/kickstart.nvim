@@ -865,17 +865,17 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'sainnhe/everforest',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      vim.cmd.colorscheme 'everforest'
-    end,
-  },
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   -- 'sainnhe/everforest',
+  --   -- priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   -- config = function()
+  --   --   vim.cmd.colorscheme 'everforest'
+  --   -- end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
   {
