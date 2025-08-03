@@ -1,9 +1,9 @@
 ;; norg
 @document.meta
-title: {{_variable_}}
-description: {{_variable_}}
+title: {{_lua:vim.fn.input("Title: ")_}}
+description: {{_lua:vim.fn.input("Desc: ")_}}
 categories: [
-	{{_variable_}}
+	{{_lua:vim.fn.input("Categories: ")_}}
 ]
 created: {{_lua:os.date("!%Y-%m-%dT%H:%M:%S") .. os.date("%z")_}}
 updated: {{_lua:os.date("!%Y-%m-%dT%H:%M:%S") .. os.date("%z")_}}

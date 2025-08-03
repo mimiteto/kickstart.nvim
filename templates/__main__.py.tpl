@@ -1,9 +1,9 @@
 ;; python
 #! /usr/bin/env python3
 
-""" {{_variable_}} is a packages that {{_cursor_}} """
+""" {{_lua:vim.fn.input("Script name: ")_}} is a packages that {{_cursor_}} """
 
-import {{_variable_}}
+import {{_lua:vim.fn.input("Package name: ")_}}
 
 
 def main() -> None:

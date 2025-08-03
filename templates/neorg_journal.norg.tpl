@@ -4,7 +4,7 @@ title: {{_lua:os.date("%y/%m/%d")_}}
 description: Journal for {{_lua:os.date("%y/%m/%d")_}}
 categories: [
     journal
-    {{_variable_}}
+    {{_lua:vim.fn.input("Categories: ")_}}
 ]
 created: {{_lua:os.date("%y/%m/%dT%H:%M:%S")_}}
 updated: {{_lua:os.date("%y/%m/%dT%H:%M:%S")_}}

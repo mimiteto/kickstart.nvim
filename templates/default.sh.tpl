@@ -1,4 +1,4 @@
-;; bash
+;; sh
 #! /usr/bin/env bash
 
 # Script that {_variable_}
