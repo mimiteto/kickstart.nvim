@@ -5,3 +5,4 @@ dest
 *.egg-info
 .venv
 __pycache__
+.coverage
