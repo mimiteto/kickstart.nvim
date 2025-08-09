@@ -878,31 +878,6 @@ require('lazy').setup({
   -- },
 
   -- Highlight todo, notes, etc in comments
-  {
-    'folke/todo-comments.nvim',
-    event = 'VimEnter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-      signs = false,
-      keywords = {
-        TODO = {
-          alt = { 'ToDo', 'todo', 'todolist', 'ToDoList' },
-        },
-      },
-      highlight = {
-        pattern = [[.*<((KEYWORDS)%(\((user|[iI]583641)\))?):]],
-      },
-    },
-    config = function()
-      vim.keymap.set('n', ']T', function()
-        require('todo-comments').jump_next()
-      end, { desc = 'Next [t]odo comment' })
-
-      vim.keymap.set('n', '[T', function()
-        require('todo-comments').jump_prev()
-      end, { desc = 'Previous [t]odo comment' })
-    end,
-  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
