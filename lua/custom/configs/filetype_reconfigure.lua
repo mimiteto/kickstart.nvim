@@ -26,3 +26,5 @@ end
 
 reconfigure_filetype('*.bu', 'yaml')
 reconfigure_filetype('*.tfstate', 'json')
+reconfigure_filetype('*.containerfile', 'dockerfile')
+reconfigure_filetype('Containerfile', 'dockerfile')
