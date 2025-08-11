@@ -23,7 +23,7 @@ return {
     },
     config = function()
       vim.keymap.set('n', '<leader>cc', ':CodeCompanion', { noremap = true, silent = true, desc = '[C]ode [C]ompanion' })
-      vim.keymap.set('n', '<leader>ccc', ':CodeCompanionChat<CR>', { noremap = true, silent = true, desc = '[C]ode [C]ompanion [C]hat' })
+      vim.keymap.set('n', '<leader>ccc', ':CodeCompanionChat Toggle<CR>', { noremap = true, silent = true, desc = '[C]ode [C]ompanion [C]hat' })
       vim.keymap.set('n', '<leader>cca', ':CodeCompanionActions<CR>', { noremap = true, silent = true, desc = '[C]ode [C]ompanion [A]ctions' })
       require('codecompanion').setup {
         log_level = 'DEBUG',
