@@ -536,9 +536,35 @@ require('lazy').setup({
       local servers = {
 
         gopls = {},
-        pyright = {},
-        jedi_language_server = {},
-        pylsp = {},
+        pyright = {
+          analysis = {
+            python = {
+              useLibraryCodeForTypes = true,
+              diagnosticSeverityOverrides = {
+                reportGeneralTypeIssues = 'none',
+                reportOptionalMemberAccess = 'none',
+                reportOptionalSubscript = 'none',
+                reportPrivateImportUsage = 'none',
+              },
+              autoImportCompletions = false,
+            },
+            linting = { pylintEnabled = false },
+          },
+        },
+        -- jedi_language_server = {},
+        pylsp = {
+          pylsp = {
+            builtin = {
+              installExtraArgs = { 'flake8', 'pycodestyle', 'pydocstyle', 'pyflakes', 'pylint', 'yapf' },
+            },
+            plugins = {
+              jedi_completion = { enabled = false },
+              rope_completion = { enabled = false },
+              flake8 = { enabled = false },
+              pyflakes = { enabled = false },
+            },
+          },
+        },
         ansiblels = {},
         -- ast_grep = {},
         autotools_ls = {},
@@ -628,7 +654,7 @@ require('lazy').setup({
         'usort',
         'yapf',
         'pyment',
-        'ruff',
+        -- 'ruff',
         'semgrep',
         'snyk',
         'systemdlint',
