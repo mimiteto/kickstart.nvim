@@ -10,7 +10,7 @@ return {
         },
       },
       highlight = {
-        pattern = [[.*<((KEYWORDS)%(\((user|[iI]583641)\))?):]],
+        pattern = [[.*<((KEYWORDS)%(\((user|[iI]583641|mimiteto)\))?):]],
       },
     }
     vim.keymap.set('n', ']T', function()
