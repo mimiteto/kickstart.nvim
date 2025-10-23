@@ -535,7 +535,28 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
 
-        gopls = {},
+        gopls = {
+          hints = {
+            constantValues = true,
+            parameterNames = true,
+          },
+          annotations = {
+            vulncheck = 'Imports',
+          },
+          analyses = {
+            QF1001 = true,
+            QF1010 = true,
+            S1001 = true,
+            S1002 = true,
+            S1004 = true,
+            S1006 = true,
+            S1009 = true,
+            S1016 = true,
+            S1021 = true,
+            S1023 = true,
+            S1028 = true,
+          },
+        },
         pyright = {
           analysis = {
             python = {
