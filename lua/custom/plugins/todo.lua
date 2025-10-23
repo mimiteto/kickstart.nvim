@@ -8,6 +8,9 @@ return {
         TODO = {
           alt = { 'ToDo', 'todo', 'todolist', 'ToDoList' },
         },
+        NOTE = {
+          alt = { 'Note', 'Notes', 'NOTES' },
+        },
       },
       highlight = {
         pattern = [[.*<((KEYWORDS)%(\((user|[iI]583641|mimiteto)\))?):]],
