@@ -826,7 +826,6 @@ require('lazy').setup({
 
       sources = {
         -- default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev', 'env' },
-        -- default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev' },
         default = { 'snippets', 'copilot', 'lsp', 'path', 'git', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
@@ -853,7 +852,7 @@ require('lazy').setup({
           copilot = {
             name = 'copilot',
             module = 'blink-copilot',
-            score_offset = 100,
+            score_offset = 110,
             async = true,
           },
           git = {
@@ -897,7 +896,10 @@ require('lazy').setup({
         },
       },
 
-      snippets = { preset = 'luasnip' },
+      snippets = {
+        preset = 'luasnip',
+        score_offset = 70,
+      },
 
       -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
       -- which automatically downloads a prebuilt binary when enabled.
