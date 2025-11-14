@@ -18,13 +18,6 @@ local ts_utils = require 'nvim-treesitter.ts_utils'
 local get_node_text = vim.treesitter.get_node_text
 
 -- Adapted from https://github.com/tjdevries/config_manager/blob/1a93f03dfe254b5332b176ae8ec926e69a5d9805/xdg_config/nvim/lua/tj/snips/ft/go.lua
-local function same(index)
-  return f(function(args)
-    return args[1]
-  end, { index })
-end
-
--- Adapted from https://github.com/tjdevries/config_manager/blob/1a93f03dfe254b5332b176ae8ec926e69a5d9805/xdg_config/nvim/lua/tj/snips/ft/go.lua
 vim.treesitter.query.set(
   'go',
   'LuaSnip_Result',
@@ -141,7 +134,7 @@ return {
     i(4),
     t ')',
     t { '', 'if ' },
-    same(2),
+    i(2, { 'err' }),
     t { ' != nil {', '\treturn ' },
     d(5, go_ret_vals, { 2, 3 }),
     t { '', '}' },
@@ -163,7 +156,7 @@ return {
   }, {
     i(1, { 'slice' }),
     t ' = append(',
-    same(1),
+    i(1, { 'slice' }),
     t ', ',
     i(2, { 'variadic_vals' }),
     t ' )',
@@ -174,7 +167,7 @@ return {
     i(1, 'VarName'),
     i(2, { ' description' }),
     t { '', '' },
-    same(1),
+    i(1, 'VarName'),
     i(3, ' Type'),
     t ' = ',
     i(4, 'value'),
