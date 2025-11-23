@@ -653,7 +653,7 @@ require('lazy').setup({
         'black',
         'vulture',
         'debugpy',
-        'docformatter',
+        -- 'docformatter',
         'flake8',
         'pyflakes',
         'pylama',
