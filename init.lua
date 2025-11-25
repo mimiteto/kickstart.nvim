@@ -587,10 +587,8 @@ require('lazy').setup({
           },
         },
         ansiblels = {},
-        -- ast_grep = {},
         autotools_ls = {},
         bashls = {},
-        -- bzl = {},
         diagnosticls = {},
         dockerls = {},
         golangci_lint_ls = {},
@@ -599,12 +597,14 @@ require('lazy').setup({
         -- pylyzer = {},
         -- pyre = {},
         terraformls = {},
-        yamlls = {},
-        -- rust_analyzer = {},
-        -- tsserver = {},
-        -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+        yamlls = {
+          filetypes = { 'yaml', 'yaml.kubernetes' },
+          schemaStore = { enable = true },
+          schemas = {
+            ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/all.json'] = 'yaml.kubernetes',
+          },
+        },
         systemd_ls = {},
-
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
@@ -679,6 +679,8 @@ require('lazy').setup({
         'semgrep',
         'snyk',
         'systemdlint',
+        'kube-linter',
+        'kubescape',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
