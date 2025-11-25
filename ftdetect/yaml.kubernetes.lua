@@ -5,5 +5,8 @@ vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
     if first_50:match 'apiVersion:' and first_50:match 'kind:' then
       vim.bo.filetype = 'yaml.kubernetes'
     end
+    if vim.api.nvim_buf_get_name(0):match 'kustomization%.yaml$' then
+      vim.bo.filetype = 'yaml.kubernetes'
+    end
   end,
 })
