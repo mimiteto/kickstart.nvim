@@ -135,4 +135,136 @@ return {
     i(5, 'main'),
     t { '', '' },
   }),
+  s('k-role', {
+    t {
+      'apiVersion: rbac.authorization.k8s.io/v1',
+      'kind: Role',
+      'metadata:',
+      '  namespace: ',
+    },
+    i(1, 'default'),
+    t {
+      '',
+      '  name: ',
+    },
+    i(2, 'my-role'),
+    t {
+      '',
+      'rules:',
+      '- apiGroups: ["',
+    },
+    i(3, '"'),
+    t {
+      '"]',
+      '',
+      '  resources: ["',
+    },
+    i(4, 'pods'),
+    t {
+      '"]',
+      '  verbs: ["',
+    },
+    i(5, 'get'),
+    t {
+      '", "',
+    },
+    i(6, 'list'),
+    t {
+      '"]',
+    },
+    t { '', '' },
+  }),
+  s('k-clusterrole', {
+    t {
+      'apiVersion: rbac.authorization.k8s.io/v1',
+      'kind: ClusterRole',
+      'metadata:',
+      '  name: ',
+    },
+    i(1, 'my-clusterrole'),
+    t {
+      'rules:',
+      '- apiGroups: ["',
+    },
+    i(2, '"'),
+    t {
+      '  resources: ["',
+    },
+    i(3, 'nodes'),
+    t {
+      '"]',
+      '  verbs: ["',
+    },
+    i(4, 'get'),
+    t {
+      '", "',
+    },
+    i(5, 'list'),
+    t {
+      '"]',
+    },
+    t { '', '' },
+  }),
+  s('k-rolebinding', {
+    t {
+      'apiVersion: rbac.authorization.k8s.io/v1',
+      'kind: RoleBinding',
+      'metadata:',
+      '  namespace: ',
+    },
+    i(1, 'default'),
+    t {
+      '  name: ',
+    },
+    i(2, 'my-rolebinding'),
+    t {
+      'subjects:',
+      '- kind: ',
+    },
+    i(3, 'User'),
+    t {
+      '  name: ',
+    },
+    i(4, 'jane'),
+    t {
+      '  apiGroup: rbac.authorization.k8s.io',
+      'roleRef:',
+      '  kind: Role',
+      '  name: ',
+    },
+    i(5, 'my-role'),
+    t {
+      '  apiGroup: rbac.authorization.k8s.io',
+    },
+    t { '', '' },
+  }),
+  s('k-clusterrolebinding', {
+    t {
+      'apiVersion: rbac.authorization.k8s.io/v1',
+      'kind: ClusterRoleBinding',
+      'metadata:',
+      '  name: ',
+    },
+    i(1, 'my-clusterrolebinding'),
+    t {
+      'subjects:',
+      '- kind: ',
+    },
+    i(2, 'User'),
+    t {
+      '  name: ',
+    },
+    i(3, 'jane'),
+    t {
+      '  apiGroup: rbac.authorization.k8s.io',
+      'roleRef:',
+      '  kind: ClusterRole',
+      '  name: ',
+    },
+    i(4, 'my-clusterrole'),
+    t {
+      '  apiGroup: rbac.authorization.k8s.io',
+    },
+    t { '', '' },
+  }),
 }
