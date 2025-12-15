@@ -17,7 +17,20 @@ return {
   {
     'linrongbin16/gitlinker.nvim',
     cmd = 'GitLink',
-    opts = {},
+    config = function()
+      require('gitlinker').setup {
+        router = {
+          browse = {
+            ['^github%.tools%.sap'] = require('gitlinker.routers').github_browse,
+            ['^github%.wdf%.sap%.corp'] = require('gitlinker.routers').github_browse,
+          },
+          blame = {
+            ['^github%.tools%.sap'] = require('gitlinker.routers').github_blame,
+            ['^github%.wdf%.sap%.corp'] = require('gitlinker.routers').github_blame,
+          },
+        },
+      }
+    end,
     keys = {
       { '<leader>gy', '<cmd>GitLink<cr>', mode = { 'n', 'v' }, desc = 'Yank git link' },
       { '<leader>gY', '<cmd>GitLink!<cr>', mode = { 'n', 'v' }, desc = 'Open git link' },
