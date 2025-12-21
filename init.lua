@@ -675,7 +675,7 @@ require('lazy').setup({
         'usort',
         'yapf',
         'pyment',
-        -- 'ruff',
+        'ruff',
         'semgrep',
         'snyk',
         'systemdlint',
