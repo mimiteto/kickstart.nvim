@@ -681,6 +681,13 @@ require('lazy').setup({
         'systemdlint',
         'kube-linter',
         'kubescape',
+        'codebook',
+        'delve',
+        'gci',
+        'go-debug-adapter',
+        'golangci-lint',
+        'iferr',
+        'staticcheck',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
