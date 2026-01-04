@@ -43,23 +43,28 @@ return {
     },
     i(1, 'my-app'),
     t {
+      '',
       '  namespace: ',
     },
     i(2, 'default'),
     t {
+      '',
       'spec:',
       '  interval: ',
     },
     i(3, '1m'),
     t {
+      '',
       '  path: ',
     },
     i(4, './deploy'),
     t {
+      '',
       '  prune: ',
     },
     i(5, 'true'),
     t {
+      '',
       '  sourceRef:',
       '    kind: GitRepository',
       '    name: ',
@@ -76,31 +81,37 @@ return {
     },
     i(1, 'my-chart'),
     t {
+      '',
       '  namespace: ',
     },
     i(2, 'default'),
     t {
+      '',
       'spec:',
       '  interval: ',
     },
     i(3, '1m'),
     t {
+      '',
       '  chart:',
       '    spec:',
       '      chart: ',
     },
     i(4, 'chart-name'),
     t {
+      '',
       '      version: ',
     },
     i(5, '1.0.0'),
     t {
+      '',
       '      sourceRef:',
       '        kind: HelmRepository',
       '        name: ',
     },
     i(6, 'my-helmrepo'),
     t {
+      '',
       '  values:',
       '    ',
     },
@@ -116,19 +127,23 @@ return {
     },
     i(1, 'my-repo'),
     t {
+      '',
       '  namespace: ',
     },
     i(2, 'default'),
     t {
+      '',
       'spec:',
       '  interval: ',
     },
     i(3, '1m'),
     t {
+      '',
       '  url: ',
     },
     i(4, 'https://github.com/example/repo'),
     t {
+      '',
       '  ref:',
       '    branch: ',
     },
