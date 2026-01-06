@@ -604,7 +604,7 @@ require('lazy').setup({
             ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/all.json'] = 'yaml.kubernetes',
           },
         },
-        systemd_ls = {},
+        systemd_lsp = {},
         lua_ls = {
           Lua = {
             workspace = { checkThirdParty = false },
