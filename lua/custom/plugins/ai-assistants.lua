@@ -20,6 +20,7 @@ return {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
       'nvim-telescope/telescope.nvim',
+      'franco-ruggeri/codecompanion-spinner.nvim',
     },
     config = function()
       vim.keymap.set('n', '<leader>cc', ':CodeCompanion', { noremap = true, silent = true, desc = '[C]ode [C]ompanion' })
@@ -58,6 +59,11 @@ return {
               show_default_actions = true, -- Show the default actions in the action palette?
               show_default_prompt_library = true, -- Show the default prompt library in the action palette?
             },
+          },
+        },
+        extensions = {
+          spinner = {
+            opts = {},
           },
         },
       }
