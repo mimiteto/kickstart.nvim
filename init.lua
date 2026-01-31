@@ -677,7 +677,7 @@ require('lazy').setup({
         'pyment',
         'ruff',
         'semgrep',
-        'snyk',
+        -- 'snyk', # Err about auth
         'systemdlint',
         'kube-linter',
         'kubescape',
