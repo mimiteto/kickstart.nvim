@@ -6,22 +6,43 @@ local f = ls.function_node
 
 -- Helper functions
 local function date_iso(date)
-  local time = date and os.time(date) or os.time()
+  local time
+  if type(date) == 'number' then
+    time = date
+  elseif type(date) == 'table' and date.year and date.month and date.day then
+    time = os.time(date)
+  else
+    time = os.time()
+  end
   return os.date('!%Y-%m-%dT%H:%M:%S', time) .. os.date('%z', time)
 end
 
 local function date_short(date)
-  local time = date and os.time(date) or os.time()
+  local time
+  if type(date) == 'number' then
+    time = date
+  elseif type(date) == 'table' and date.year and date.month and date.day then
+    time = os.time(date)
+  else
+    time = os.time()
+  end
   return os.date('%y/%m/%d', time)
 end
 
 local function datetime_short(date)
-  local time = date and os.time(date) or os.time()
+  local time
+  if type(date) == 'number' then
+    time = date
+  elseif type(date) == 'table' and date.year and date.month and date.day then
+    time = os.time(date)
+  else
+    time = os.time()
+  end
   return os.date('%y/%m/%dT%H:%M:%S', time)
 end
 
 local function get_next_workday(date)
-  local time = date and os.time(date) or os.time()
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
   local wday = tonumber(os.date('%w', time)) -- 0=Sunday, 1=Monday, ..., 6=Saturday
   local days_to_add = 1
   if wday == 5 then -- Friday
@@ -31,11 +52,11 @@ local function get_next_workday(date)
   elseif wday == 0 then -- Sunday
     days_to_add = 1
   end
-  return os.date('*t', time + days_to_add * 24 * 60 * 60)
+  return time + days_to_add * 24 * 60 * 60
 end
 
 local function get_previous_workday(date)
-  local time = date and os.time(date) or os.time()
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
   local wday = tonumber(os.date('%w', time)) -- 0=Sunday, 1=Monday, ..., 6=Saturday
   local days_to_subtract = 1
   if wday == 1 then -- Monday
@@ -45,29 +66,40 @@ local function get_previous_workday(date)
   elseif wday == 6 then -- Saturday
     days_to_subtract = 1
   end
-  return os.date('*t', time - days_to_subtract * 24 * 60 * 60)
+  return time - days_to_subtract * 24 * 60 * 60
 end
 
 local function get_effective_workday(date)
-  local time = date and os.time(date) or os.time()
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
   local hour = tonumber(os.date('%H', time))
   local min = tonumber(os.date('%M', time))
-  -- If after 16:30, return next workday; otherwise return current date as table
+  -- If after 16:30, return next workday; otherwise return current date as timestamp
   if hour > 16 or (hour == 16 and min >= 30) then
-    return get_next_workday(date)
+    return get_next_workday(time)
   end
-  return os.date('*t', time)
+  return time
 end
 
 local function get_effective_previous_workday(date)
-  local time = date and os.time(date) or os.time()
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
   local hour = tonumber(os.date('%H', time))
   local min = tonumber(os.date('%M', time))
   -- If after 16:30, return current date; otherwise return previous workday
   if hour > 16 or (hour == 16 and min >= 30) then
-    return os.date('*t', time)
+    return time
   end
-  return get_previous_workday(date)
+  return get_previous_workday(time)
+end
+
+local function get_effective_next_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local hour = tonumber(os.date('%H', time))
+  local min = tonumber(os.date('%M', time))
+  -- If after 16:30, return next workday from next workday; otherwise return next workday from current
+  if hour > 16 or (hour == 16 and min >= 30) then
+    return get_next_workday(get_next_workday(time))
+  end
+  return get_next_workday(time)
 end
 
 return {
@@ -155,7 +187,7 @@ return {
     end),
     t { '', '', '', '* Leftovers', '', '', '* Tomorrow {:$/journal/' },
     f(function()
-      return date_short(get_next_workday(get_effective_workday()))
+      return date_short(get_effective_next_workday())
     end),
     t { ':}' },
   }),
@@ -200,7 +232,7 @@ return {
       '* Tomorrow {:$/journal/',
     },
     f(function()
-      return date_short(get_next_workday(get_effective_workday()))
+      return date_short(get_effective_next_workday())
     end),
     t { ':}' },
   }),
@@ -239,7 +271,7 @@ return {
       '* Tomorrow {:$/journal/',
     },
     f(function()
-      return date_short(get_next_workday(get_effective_workday()))
+      return date_short(get_effective_next_workday())
     end),
     t { ':}' },
   }),
