@@ -11,6 +11,42 @@ local function split_neorg(type, opts)
   vim.cmd('Neorg ' .. opts.args)
 end
 
+local function get_next_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local wday = tonumber(os.date('%w', time)) -- 0=Sunday, 1=Monday, ..., 6=Saturday
+  local days_to_add = 1
+  if wday == 5 then -- Friday
+    days_to_add = 3
+  elseif wday == 6 then -- Saturday
+    days_to_add = 2
+  elseif wday == 0 then -- Sunday
+    days_to_add = 1
+  end
+  return time + days_to_add * 24 * 60 * 60
+end
+
+local function get_effective_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local hour = tonumber(os.date('%H', time))
+  local min = tonumber(os.date('%M', time))
+  -- If after 16:30, return next workday; otherwise return current date as timestamp
+  if hour > 16 or (hour == 16 and min >= 30) then
+    return get_next_workday(time)
+  end
+  return time
+end
+
+local function get_effective_next_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local hour = tonumber(os.date('%H', time))
+  local min = tonumber(os.date('%M', time))
+  -- If after 16:30, return next workday from next workday; otherwise return next workday from current
+  if hour > 16 or (hour == 16 and min >= 30) then
+    return get_next_workday(get_next_workday(time))
+  end
+  return get_next_workday(time)
+end
+
 return {
   'nvim-neorg/neorg',
   build = function()
@@ -91,6 +127,32 @@ return {
     vim.api.nvim_create_user_command('SNeorg', function(opts)
       split_neorg('split', opts)
     end, { nargs = '?', desc = 'Open Neorg in a split' })
+
+    vim.api.nvim_create_user_command('StartNotes', function()
+      vim.defer_fn(function()
+        -- Get workspace path based on OS
+        local workspace = def_workspace()
+        local base_path = vim.fn.expand('~/notes/' .. workspace .. '/journal')
+
+        local current_day = os.date('%Y-%m-%d', get_effective_workday())
+        local next_day = os.date('%Y-%m-%d', get_effective_next_workday())
+
+        -- Build file paths (Neorg journal uses YYYY/MM/DD.norg structure)
+        local current_year, current_month, current_day_num = current_day:match '(%d+)-(%d+)-(%d+)'
+        local next_year, next_month, next_day_num = next_day:match '(%d+)-(%d+)-(%d+)'
+
+        local current_file = string.format('%s/%s/%s/%s.norg', base_path, current_year, current_month, current_day_num)
+        local next_file = string.format('%s/%s/%s/%s.norg', base_path, next_year, next_month, next_day_num)
+
+        -- Create directories if they don't exist
+        vim.fn.mkdir(vim.fn.fnamemodify(current_file, ':h'), 'p')
+        vim.fn.mkdir(vim.fn.fnamemodify(next_file, ':h'), 'p')
+
+        -- Open first file in current buffer, second in vsplit
+        vim.cmd('edit ' .. vim.fn.fnameescape(current_file))
+        vim.cmd('vsplit ' .. vim.fn.fnameescape(next_file))
+      end, 100)
+    end, { desc = 'Open effective current and next workday journals in vsplits' })
 
     require('neorg').setup {
       load = {
