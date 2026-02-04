@@ -25,6 +25,31 @@ local function get_next_workday(date)
   return time + days_to_add * 24 * 60 * 60
 end
 
+local function get_previous_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local wday = tonumber(os.date('%w', time)) -- 0=Sunday, 1=Monday, ..., 6=Saturday
+  local days_to_subtract = 1
+  if wday == 1 then -- Monday
+    days_to_subtract = 3
+  elseif wday == 0 then -- Sunday
+    days_to_subtract = 2
+  elseif wday == 6 then -- Saturday
+    days_to_subtract = 1
+  end
+  return time - days_to_subtract * 24 * 60 * 60
+end
+
+local function get_effective_previous_workday(date)
+  local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
+  local hour = tonumber(os.date('%H', time))
+  local min = tonumber(os.date('%M', time))
+  -- If after 16:30, return current date; otherwise return previous workday
+  if hour > 16 or (hour == 16 and min >= 30) then
+    return time
+  end
+  return get_previous_workday(time)
+end
+
 local function get_effective_workday(date)
   local time = date and (type(date) == 'table' and os.time(date) or date) or os.time()
   local hour = tonumber(os.date('%H', time))
@@ -134,23 +159,25 @@ return {
         local workspace = def_workspace()
         local base_path = vim.fn.expand('~/notes/' .. workspace .. '/journal')
 
-        local current_day = os.date('%Y-%m-%d', get_effective_workday())
-        local next_day = os.date('%Y-%m-%d', get_effective_next_workday())
+        -- Before 16:30: yesterday (left) + today (right)
+        -- After 16:30: today (left) + tomorrow (right)
+        local left_day = os.date('%Y-%m-%d', get_effective_previous_workday())
+        local right_day = os.date('%Y-%m-%d', get_effective_workday())
 
         -- Build file paths (Neorg journal uses YYYY/MM/DD.norg structure)
-        local current_year, current_month, current_day_num = current_day:match '(%d+)-(%d+)-(%d+)'
-        local next_year, next_month, next_day_num = next_day:match '(%d+)-(%d+)-(%d+)'
+        local left_year, left_month, left_day_num = left_day:match '(%d+)-(%d+)-(%d+)'
+        local right_year, right_month, right_day_num = right_day:match '(%d+)-(%d+)-(%d+)'
 
-        local current_file = string.format('%s/%s/%s/%s.norg', base_path, current_year, current_month, current_day_num)
-        local next_file = string.format('%s/%s/%s/%s.norg', base_path, next_year, next_month, next_day_num)
+        local left_file = string.format('%s/%s/%s/%s.norg', base_path, left_year, left_month, left_day_num)
+        local right_file = string.format('%s/%s/%s/%s.norg', base_path, right_year, right_month, right_day_num)
 
         -- Create directories if they don't exist
-        vim.fn.mkdir(vim.fn.fnamemodify(current_file, ':h'), 'p')
-        vim.fn.mkdir(vim.fn.fnamemodify(next_file, ':h'), 'p')
+        vim.fn.mkdir(vim.fn.fnamemodify(left_file, ':h'), 'p')
+        vim.fn.mkdir(vim.fn.fnamemodify(right_file, ':h'), 'p')
 
-        -- Open first file in current buffer, second in vsplit
-        vim.cmd('edit ' .. vim.fn.fnameescape(current_file))
-        vim.cmd('vsplit ' .. vim.fn.fnameescape(next_file))
+        -- Open left file in current buffer, right file in vsplit
+        vim.cmd('edit ' .. vim.fn.fnameescape(left_file))
+        vim.cmd('vsplit ' .. vim.fn.fnameescape(right_file))
       end, 100)
     end, { desc = 'Open effective current and next workday journals in vsplits' })
 
