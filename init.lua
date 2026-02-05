@@ -591,6 +591,7 @@ require('lazy').setup({
         bashls = {},
         diagnosticls = {},
         dockerls = {},
+        gh_actions_ls = {},
         golangci_lint_ls = {},
         helm_ls = {},
         marksman = {},
