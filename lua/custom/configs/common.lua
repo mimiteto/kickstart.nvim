@@ -1,6 +1,10 @@
 -- Set highlight on search
 vim.o.hlsearch = true
 
+-- Clear highlights on search when pressing <Esc> in normal mode
+--  See `:help hlsearch`
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
 -- Make line numbers default
 vim.wo.number = true
 vim.wo.relativenumber = false
@@ -13,9 +17,6 @@ vim.wo.wrap = false
 
 -- Enable break indent
 vim.o.breakindent = true
-
--- Save undo history
-vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.o.ignorecase = true
@@ -58,9 +59,6 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.inccommand = 'split'
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.o.cursorline = true

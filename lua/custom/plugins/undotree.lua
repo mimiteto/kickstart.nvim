@@ -1,3 +1,6 @@
+-- Save undo history
+vim.o.undofile = true
+
 return {
   'mbbill/undotree',
   opts = {},

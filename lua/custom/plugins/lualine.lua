@@ -1,9 +1,12 @@
+-- Don't show the mode, since it's already in the status line
+vim.o.showmode = false
+
 local function current_symbol()
   -- Check if symbols are enabled for current buffer
   if not vim.b.symbols_enabled then
     return ''
   end
-  
+
   local trouble = require 'trouble'
   local symbols = trouble.statusline {
     mode = 'lsp_document_symbols',
@@ -44,4 +47,3 @@ return {
     }
   end,
 }
-
