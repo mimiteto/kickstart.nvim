@@ -186,7 +186,8 @@ return {
         ['core.defaults'] = {},
         ['core.concealer'] = {
           config = {
-            icon_preset = 'diamond',
+            icon_preset = 'basic',
+            -- icon_preset = 'diamond',
           },
         },
         ['core.dirman'] = {
