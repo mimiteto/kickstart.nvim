@@ -1,3 +1,11 @@
+local function get_correct_model()
+  if vim.fn.has 'mac' == 1 then
+    return 'claude-opus-4.5'
+  else
+    return 'claude-sonnet-4.6'
+  end
+end
+
 return {
   {
     -- Completion
@@ -33,7 +41,7 @@ return {
             adapter = {
               name = 'copilot',
               -- model = 'claude-opus-4.5',
-              model = 'claude-sonnet-4.5',
+              model = get_correct_model(),
             },
           },
         },
