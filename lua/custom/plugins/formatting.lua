@@ -3,7 +3,30 @@ return {
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
+    cmd = { 'ConformInfo', 'FormatDisable', 'FormatEnable' },
+    config = function(_, opts)
+      require('conform').setup(opts)
+
+      vim.api.nvim_create_user_command('FormatDisable', function(args)
+        if args.bang then
+          vim.g.disable_autoformat = true
+          vim.notify('Format-on-save disabled globally', vim.log.levels.INFO)
+        else
+          vim.b.disable_autoformat = true
+          vim.notify('Format-on-save disabled for this buffer', vim.log.levels.INFO)
+        end
+      end, { desc = 'Disable format-on-save (! for global)', bang = true })
+
+      vim.api.nvim_create_user_command('FormatEnable', function(args)
+        if args.bang then
+          vim.g.disable_autoformat = false
+          vim.notify('Format-on-save re-enabled globally', vim.log.levels.INFO)
+        else
+          vim.b.disable_autoformat = false
+          vim.notify('Format-on-save re-enabled for this buffer', vim.log.levels.INFO)
+        end
+      end, { desc = 'Re-enable format-on-save (! for global)', bang = true })
+    end,
     keys = {
       {
         '<leader>f',
@@ -17,9 +40,10 @@ return {
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
+        -- Disable with :FormatDisable (buffer) or :FormatDisable! (global)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+          return nil
+        end
         local disable_filetypes = { c = true, cpp = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
