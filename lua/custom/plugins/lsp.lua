@@ -169,6 +169,49 @@ return { -- LSP Plugins
         },
       }
 
+      -- DiagLevel: set minimum severity for diagnostic jumping
+      -- Usage: :DiagLevel WARN   (only jump to WARN and above)
+      --        :DiagLevel HINT   (jump to everything, the default)
+      --        :DiagLevel        (show current level)
+      local severity_names = { 'ERROR', 'WARN', 'INFO', 'HINT' }
+      vim.api.nvim_create_user_command('DiagLevel', function(args)
+        if args.args == '' then
+          local current = vim.diagnostic.config().jump and vim.diagnostic.config().jump.severity
+          if current then
+            vim.notify('DiagLevel: ' .. (severity_names[current.min] or 'HINT') .. '+', vim.log.levels.INFO)
+          else
+            vim.notify('DiagLevel: HINT+ (all)', vim.log.levels.INFO)
+          end
+          return
+        end
+
+        local level = args.args:upper()
+        local sev = vim.diagnostic.severity[level]
+        if not sev then
+          vim.notify('Invalid severity: ' .. args.args .. '. Use: ERROR, WARN, INFO, HINT', vim.log.levels.ERROR)
+          return
+        end
+
+        local jump_opts = {
+          on_jump = function()
+            vim.diagnostic.open_float()
+          end,
+        }
+        -- HINT (4) means everything, no filter needed
+        if sev < vim.diagnostic.severity.HINT then
+          jump_opts.severity = { min = sev }
+        end
+
+        vim.diagnostic.config { jump = jump_opts }
+        vim.notify('DiagLevel: ' .. level .. '+', vim.log.levels.INFO)
+      end, {
+        desc = 'Set minimum diagnostic severity for jumping',
+        nargs = '?',
+        complete = function()
+          return severity_names
+        end,
+      })
+
       -- Broadcast blink.cmp capabilities to all LSP servers
       vim.lsp.config('*', {
         capabilities = require('blink.cmp').get_lsp_capabilities(),
