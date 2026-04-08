@@ -162,7 +162,11 @@ return { -- LSP Plugins
         virtual_lines = false, -- Teest shows up underneath the line, with virtual lines
 
         -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
-        jump = { float = true },
+        jump = {
+          on_jump = function()
+            vim.diagnostic.open_float()
+          end,
+        },
       }
 
       -- Broadcast blink.cmp capabilities to all LSP servers
