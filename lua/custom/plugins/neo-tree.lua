@@ -56,6 +56,16 @@ return {
             vim.fn.setreg('"', filepath)
             vim.notify('Copied: ' .. filepath)
           end,
+          ['x'] = function(state)
+            local node = state.tree:get_node()
+            local filepath = node:get_id()
+            vim.fn.system { 'chmod', '+x', filepath }
+            if vim.v.shell_error == 0 then
+              vim.notify('Made executable: ' .. node.name)
+            else
+              vim.notify('Failed to chmod +x: ' .. node.name, vim.log.levels.ERROR)
+            end
+          end,
         },
       },
     },
