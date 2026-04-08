@@ -165,48 +165,44 @@ return { -- LSP Plugins
         jump = { float = true },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      -- Broadcast blink.cmp capabilities to all LSP servers
+      vim.lsp.config('*', {
+        capabilities = require('blink.cmp').get_lsp_capabilities(),
+      })
 
-      -- Enable the following language servers
-      --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-      --
-      --  Add any additional override configuration in the following tables. Available keys are:
-      --  - cmd (table): Override the default command used to start the server
-      --  - filetypes (table): Override the default list of associated filetypes for the server
-      --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-      --  - settings (table): Override the default settings passed when initializing the server.
-      --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local servers = {
-
-        gopls = {
-          hints = {
-            constantValues = true,
-            parameterNames = true,
-          },
-          annotations = {
-            vulncheck = 'Imports',
-          },
-          analyses = {
-            QF1001 = true,
-            QF1010 = true,
-            S1001 = true,
-            S1002 = true,
-            S1004 = true,
-            S1006 = true,
-            S1009 = true,
-            S1016 = true,
-            S1021 = true,
-            S1023 = true,
-            S1028 = true,
+      -- Per-server settings via the native vim.lsp.config() API.
+      -- These are deep-merged with the defaults from nvim-lspconfig's lsp/*.lua files.
+      vim.lsp.config('gopls', {
+        settings = {
+          gopls = {
+            hints = {
+              constantValues = true,
+              parameterNames = true,
+            },
+            annotations = {
+              vulncheck = 'Imports',
+            },
+            analyses = {
+              QF1001 = true,
+              QF1010 = true,
+              S1001 = true,
+              S1002 = true,
+              S1004 = true,
+              S1006 = true,
+              S1009 = true,
+              S1016 = true,
+              S1021 = true,
+              S1023 = true,
+              S1028 = true,
+            },
           },
         },
-        pyright = {
-          analysis = {
-            python = {
+      })
+
+      vim.lsp.config('pyright', {
+        settings = {
+          python = {
+            analysis = {
               useLibraryCodeForTypes = true,
               diagnosticSeverityOverrides = {
                 reportGeneralTypeIssues = 'none',
@@ -219,8 +215,12 @@ return { -- LSP Plugins
             linting = { pylintEnabled = false },
           },
         },
-        -- jedi_language_server = {},
-        pylsp = {
+      })
+
+      -- vim.lsp.config('jedi_language_server', {})
+
+      vim.lsp.config('pylsp', {
+        settings = {
           pylsp = {
             builtin = {
               installExtraArgs = { 'flake8', 'pycodestyle', 'pydocstyle', 'pyflakes', 'pylint', 'yapf' },
@@ -240,27 +240,22 @@ return { -- LSP Plugins
             },
           },
         },
-        ansiblels = {},
-        autotools_ls = {},
-        bashls = {},
-        diagnosticls = {},
-        dockerls = {},
-        gh_actions_ls = {},
-        golangci_lint_ls = {},
-        helm_ls = {},
-        marksman = {},
-        -- pylyzer = {},
-        -- pyre = {},
-        terraformls = {},
-        yamlls = {
-          filetypes = { 'yaml', 'yaml.kubernetes' },
-          schemaStore = { enable = true },
-          schemas = {
-            ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/all.json'] = 'yaml.kubernetes',
+      })
+
+      vim.lsp.config('yamlls', {
+        filetypes = { 'yaml', 'yaml.kubernetes' },
+        settings = {
+          yaml = {
+            schemaStore = { enable = true },
+            schemas = {
+              ['https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.0/all.json'] = 'yaml.kubernetes',
+            },
           },
         },
-        systemd_lsp = {},
-        lua_ls = {
+      })
+
+      vim.lsp.config('lua_ls', {
+        settings = {
           Lua = {
             workspace = { checkThirdParty = false },
             telemetry = { enable = false },
@@ -268,96 +263,98 @@ return { -- LSP Plugins
             -- diagnostics = { disable = { 'missing-fields' } },
           },
         },
+      })
+
+      -- LSP servers to install. Servers with no custom settings use defaults
+      -- from nvim-lspconfig's lsp/*.lua files.
+      local lsp_servers = {
+        'gopls',
+        'pyright',
+        'pylsp',
+        'ansiblels',
+        'autotools_ls',
+        'bashls',
+        'diagnosticls',
+        'dockerls',
+        'gh_actions_ls',
+        'golangci_lint_ls',
+        'helm_ls',
+        'marksman',
+        -- 'pylyzer',
+        -- 'pyre',
+        'terraformls',
+        'yamlls',
+        'systemd_lsp',
+        'lua_ls',
       }
 
-      -- Ensure the servers and tools above are installed
-      --
-      -- To check the current status of installed tools and/or manually install
-      -- other tools, you can run
-      --    :Mason
-      --
-      -- You can press `g?` for help in this menu.
-      --
-      -- `mason` had to be setup earlier: to configure its options see the
-      -- `dependencies` table for `nvim-lspconfig` above.
-      --
-      -- You can add other tools here that you want Mason to install
-      -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-        'jq',
-        'actionlint',
-        'alex',
-        'misspell',
-        'gofumpt',
-        'golines',
-        'goimports',
-        'gomodifytags',
-        'gotests',
-        'nilaway',
-        'revive',
-        'pylint',
-        'isort',
-        'reorder-python-imports',
-        'pyproject-fmt',
-        'mypy',
-        'pydocstyle',
-        'autoflake',
-        'autopep8',
-        'black',
-        'vulture',
-        'debugpy',
-        -- 'docformatter',
-        'flake8',
-        'pyflakes',
-        'pylama',
-        'pyproject-flake8',
-        'bandit',
-        'markdownlint',
-        'alex',
-        'vale',
-        'shellcheck',
-        'bash-debug-adapter',
-        'shellharden',
-        'hadolint',
-        'hclfmt',
-        'yamllint',
-        'jsonlint',
-        'gitleaks',
-        'sourcery',
-        'trivy',
-        'usort',
-        'yapf',
-        'pyment',
-        'ruff',
-        'semgrep',
-        -- 'snyk', # Err about auth
-        'systemdlint',
-        'kube-linter',
-        'kubescape',
-        'codebook',
-        'delve',
-        'gci',
-        'go-debug-adapter',
-        'golangci-lint',
-        'iferr',
-        'staticcheck',
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
+      -- mason-lspconfig: install LSP servers and auto-enable them via vim.lsp.enable()
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
+        ensure_installed = lsp_servers,
+        automatic_enable = true,
+      }
+
+      -- Non-LSP tools installed via mason-tool-installer
+      require('mason-tool-installer').setup {
+        ensure_installed = {
+          'stylua', -- Used to format Lua code
+          'jq',
+          'actionlint',
+          'alex',
+          'misspell',
+          'gofumpt',
+          'golines',
+          'goimports',
+          'gomodifytags',
+          'gotests',
+          'nilaway',
+          'revive',
+          'pylint',
+          'isort',
+          'reorder-python-imports',
+          'pyproject-fmt',
+          'mypy',
+          'pydocstyle',
+          'autoflake',
+          'autopep8',
+          'black',
+          'vulture',
+          'debugpy',
+          -- 'docformatter',
+          'flake8',
+          'pyflakes',
+          'pylama',
+          'pyproject-flake8',
+          'bandit',
+          'markdownlint',
+          'alex',
+          'vale',
+          'shellcheck',
+          'bash-debug-adapter',
+          'shellharden',
+          'hadolint',
+          'hclfmt',
+          'yamllint',
+          'jsonlint',
+          'gitleaks',
+          'sourcery',
+          'trivy',
+          'usort',
+          'yapf',
+          'pyment',
+          'ruff',
+          'semgrep',
+          -- 'snyk', # Err about auth
+          'systemdlint',
+          'kube-linter',
+          'kubescape',
+          'codebook',
+          'delve',
+          'gci',
+          'go-debug-adapter',
+          'golangci-lint',
+          'iferr',
+          'staticcheck',
         },
       }
     end,

@@ -1,6 +1,15 @@
 return { -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
-  build = ':TSUpdate',
+  build = function()
+    -- Update all installed parsers except norg (known C++ compile issues on macOS)
+    local installed = require('nvim-treesitter.info').installed_parsers()
+    local to_update = vim.tbl_filter(function(lang)
+      return lang ~= 'norg'
+    end, installed)
+    if #to_update > 0 then
+      require('nvim-treesitter.install').update({ with_sync = true })(unpack(to_update))
+    end
+  end,
   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
   opts = {
