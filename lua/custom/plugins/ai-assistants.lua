@@ -2,7 +2,7 @@ local function get_correct_model()
   if vim.fn.has 'mac' == 1 then
     return 'claude-opus-4.6'
   else
-    return 'gemini-2.5-pro'
+    return 'gemini-3.1-pro'
   end
 end
 
