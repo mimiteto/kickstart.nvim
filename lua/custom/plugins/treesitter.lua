@@ -1,5 +1,6 @@
 return { -- Highlight, edit, and navigate code
   'nvim-treesitter/nvim-treesitter',
+  branch = 'master',
   build = function()
     -- Update all installed parsers except norg (known C++ compile issues on macOS)
     local installed = require('nvim-treesitter.info').installed_parsers()
