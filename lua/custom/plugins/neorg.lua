@@ -75,10 +75,35 @@ end
 return {
   'nvim-neorg/neorg',
   build = function()
-    -- The norg treesitter parser is fragile to compile (C++ flags, LLVM, etc.)
-    -- Skip the build entirely and just warn. The user can manually run
-    -- :TSInstall norg if they want to retry.
-    vim.notify('Neorg: skipping automatic parser build (known C++ compile issues). Run :TSInstall norg to retry.', vim.log.levels.WARN)
+    -- nvim-treesitter passes -std=c11 to a single cc invocation that compiles
+    -- both src/parser.c (C) and src/scanner.cc (C++), which clang rejects.
+    -- Build manually: compile each unit in its own language, then link.
+    local src = vim.fn.stdpath('data') .. '/tree-sitter-norg'
+    local out_dirs = {
+      vim.fn.stdpath('data') .. '/lazy/nvim-treesitter/parser',
+      vim.fn.stdpath('data') .. '/treesitter/parser',
+    }
+    if vim.fn.isdirectory(src) == 0 then
+      vim.notify('Neorg: tree-sitter-norg source not found at ' .. src .. '. Run :TSInstall norg once to fetch it (compile will fail; this build step then fixes it).', vim.log.levels.WARN)
+      return
+    end
+    local cmds = {
+      { 'cc', '-c', '-I./src', '-Os', '-fPIC', '-std=c11', '-o', 'parser.o', 'src/parser.c' },
+      { 'c++', '-c', '-I./src', '-Os', '-fPIC', '-o', 'scanner.o', 'src/scanner.cc' },
+      { 'c++', '-bundle', '-lstdc++', '-o', 'parser.so', 'parser.o', 'scanner.o' },
+    }
+    for _, cmd in ipairs(cmds) do
+      local r = vim.system(cmd, { cwd = src }):wait()
+      if r.code ~= 0 then
+        vim.notify('Neorg parser build failed: ' .. (r.stderr or ''), vim.log.levels.ERROR)
+        return
+      end
+    end
+    for _, d in ipairs(out_dirs) do
+      vim.fn.mkdir(d, 'p')
+      vim.fn.system({ 'cp', src .. '/parser.so', d .. '/norg.so' })
+    end
+    vim.notify('Neorg parser built and installed.', vim.log.levels.INFO)
   end,
   version = 'v9.2.0',
   dependencies = {
