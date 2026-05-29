@@ -6,6 +6,19 @@ local function get_correct_model()
   end
 end
 
+-- On mac, mirror the `claude` shell alias: route through the local proxy at
+-- http://localhost:6655/anthropic/ with the same auth token as
+-- ~/.config/llms/claude-config.json. Non-mac falls back to copilot.
+local function get_chat_adapter()
+  if vim.fn.has 'mac' == 1 then
+    return 'anthropic_proxy'
+  end
+  return {
+    name = 'copilot',
+    model = get_correct_model(),
+  }
+end
+
 -- Generates ~/.config/github-copilot/hosts.json for tools that read the legacy
 -- JSON token store (e.g. CodeCompanion). copilot.lua now stores tokens in a
 -- sqlite auth.db, so the JSON file must be created separately. Run once with
@@ -137,13 +150,32 @@ return {
       vim.keymap.set('n', '<leader>cca', ':CodeCompanionActions<CR>', { noremap = true, silent = true, desc = '[C]ode [C]ompanion [A]ctions' })
       require('codecompanion').setup {
         log_level = 'DEBUG',
+        adapters = {
+          http = {
+            anthropic_proxy = function()
+              return require('codecompanion.adapters').extend('anthropic', {
+                name = 'anthropic_proxy',
+                url = 'http://localhost:6655/anthropic/v1/messages',
+                env = {
+                  api_key = 'cmd:cat ~/.hai-key',
+                },
+                headers = {
+                  ['content-type'] = 'application/json',
+                  ['authorization'] = 'Bearer ${api_key}',
+                  ['anthropic-version'] = '2023-06-01',
+                },
+                schema = {
+                  model = {
+                    default = 'claude-opus-latest',
+                  },
+                },
+              })
+            end,
+          },
+        },
         strategies = {
           chat = {
-            adapter = {
-              name = 'copilot',
-              -- model = 'claude-opus-4.5',
-              model = get_correct_model(),
-            },
+            adapter = get_chat_adapter(),
           },
         },
         inline = {
