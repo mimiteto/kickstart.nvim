@@ -85,6 +85,9 @@ return { -- Autocompletion
     sources = {
       -- default = { 'copilot', 'lsp', 'path', 'snippets', 'git', 'lazydev', 'env' },
       default = { 'snippets', 'copilot', 'lsp', 'path', 'git', 'lazydev' },
+      per_filetype = {
+        org = { 'orgmode' },
+      },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         lsp = {
@@ -143,6 +146,11 @@ return { -- Autocompletion
               },
             },
           },
+        },
+        orgmode = {
+          name = 'Orgmode',
+          module = 'orgmode.org.autocompletion.blink',
+          fallbacks = { 'buffer' },
         },
         -- env = {
         --   name = 'Env',
