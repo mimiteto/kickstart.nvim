@@ -8,7 +8,7 @@ return {
       require('orgmode').setup {
         org_agenda_files = { '~/notes/org/**/*.org', '~/notes/*.org' },
         org_default_notes_file = '~/notes/notes.org',
-        org_todo_keywords = { 'TODO(t)', 'ONGOING(o)', 'PENDING(p)', '|', 'DONE(d)', 'CANCELED(c)', 'DELEGATED(e)' },
+        org_todo_keywords = { 'TODO(t)', 'ONGOING(o)', 'PENDING(p)', 'FIX(f)', '|', 'DONE(d)', 'CANCELED(c)', 'DELEGATED(e)' },
         org_capture_templates = {
           p = {
             description = 'Personal',
