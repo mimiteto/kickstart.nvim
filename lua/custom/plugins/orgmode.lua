@@ -25,6 +25,15 @@ return {
 
       -- Experimental LSP support
       vim.lsp.enable 'org'
+
+      -- Note command
+      vim.api.nvim_create_user_command('Note', function(opts)
+        local name = opts.args
+        if not name:match '%.org$' then
+          name = name .. '.org'
+        end
+        vim.cmd('edit ~/notes/' .. name)
+      end, { nargs = 1 })
     end,
   },
   {
