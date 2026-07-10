@@ -4,27 +4,138 @@ return {
     event = 'VeryLazy',
     ft = { 'org' },
     config = function()
+      -- Dynamic-date helpers ported from the old Neorg journal snippets.
+      -- Called from capture templates via %(...) expansion. NOTE: the body of a
+      -- %(...) is passed to lua load() as a function body, so it must `return`.
+      local C = "require('custom.configs.org_captures')"
+      local function ex(call)
+        return '%(return ' .. C .. '.' .. call .. ')'
+      end
+
       -- Setup orgmode
       require('orgmode').setup {
-        org_agenda_files = { '~/notes/org/**/*.org', '~/notes/*.org' },
+        org_agenda_files = { '~/notes/**/*.org' },
         org_default_notes_file = '~/notes/notes.org',
         org_todo_keywords = { 'TODO(t)', 'ONGOING(o)', 'PENDING(p)', 'FIX(f)', '|', 'DONE(d)', 'CANCELED(c)', 'DELEGATED(e)' },
         org_capture_templates = {
+          j = {
+            description = 'Journal — workday',
+            target = '~/notes/' .. ex 'journal_relpath()' .. '.org',
+            template = {
+              '#+title: ' .. ex 'eff_short()',
+              '#+description: Journal for ' .. ex 'eff_short()',
+              '#+filetags: :journal:%^{period}:',
+              '',
+              '* Tasks from last working day ' .. ex 'prev_leftovers_link()',
+              '',
+              '* Journal for ' .. ex 'eff_short()',
+              '** ToDos:',
+              '%?',
+              '',
+              '* Leftovers',
+              '',
+              '* Tomorrow ' .. ex 'tomorrow_link()',
+            },
+          },
+          f = {
+            description = 'Journal — first workday',
+            target = '~/notes/' .. ex 'journal_relpath()' .. '.org',
+            template = {
+              '#+title: ' .. ex 'eff_short()',
+              '#+description: Journal for ' .. ex 'eff_short()',
+              '#+filetags: :journal:%^{period}:',
+              '',
+              '* Tasks from last working day ' .. ex 'prev_leftovers_link()',
+              '',
+              '* Journal for ' .. ex 'eff_short()',
+              '** ToDos:',
+              '- [ ] "Look at the graphs" event for AWS Route53 quota and rate limits',
+              '  Canary - [[https://gardener-live.accounts.ondemand.com/saml2/idp/sso?sp=iaas-aws-canary]] (Acc - 220986883970)',
+              '  Live - [[https://gardener-live.accounts.ondemand.com/saml2/idp/sso?sp=iaas-aws-live]] (Acc - 301167567572)',
+              '  Relevant link - [[https://eu-central-1.console.aws.amazon.com/cloudwatch/home?region=eu-central-1#dashboards/dashboard/gardener-api-dashboard?start=PT2160H&end=null]]',
+              '- [ ] [[file:~/notes/sap/tasks/compliance-reporting.org]]',
+              '- [ ] [[https://github.com/gardener/hyperkube][Check hyperkube]]',
+              '%?',
+              '',
+              '* Leftovers',
+              '',
+              '* Tomorrow ' .. ex 'tomorrow_link()',
+            },
+          },
+          d = {
+            description = 'Journal — day of duty',
+            target = '~/notes/' .. ex 'journal_relpath()' .. '.org',
+            template = {
+              '#+title: ' .. ex 'eff_short()',
+              '#+description: Journal for ' .. ex 'eff_short()',
+              '#+filetags: :journal:dod:',
+              '',
+              '* Shortcuts:',
+              '** Notifications',
+              '*** Github issues - [[https://github.tools.sap/notifications]]',
+              '*** VO - [[https://portal.victorops.com/ui/sap-ti-ce/incidents]]',
+              '** Live',
+              '*** Dashboard - [[https://dashboard.garden.live.k8s.ondemand.com/namespace/_all/shoots]]',
+              '*** Issues filter - [[https://github.tools.sap/kubernetes-live/issues-live/issues?q=is%3aissue+is%3aopen+-label%3astatus%2fowner-action++-label%3astatus%2fauthor-action+-label%3astatus%2fexternal-action]]',
+              '** Canary',
+              '*** Dashboard - [[https://dashboard.garden.canary.k8s.ondemand.com/namespace/_all/shoots]]',
+              '*** Issues filter - [[https://github.tools.sap/kubernetes-canary/issues-canary/issues?q=is%3aissue+is%3aopen+-label%3astatus%2fowner-action++-label%3astatus%2fauthor-action+-label%3astatus%2fexternal-action]]',
+              '',
+              '* Tasks from last working day ' .. ex 'prev_leftovers_link()',
+              '',
+              '* Journal for ' .. ex 'eff_short()',
+              '** ToDos:',
+              '%?',
+              '',
+              '* Leftovers',
+              '',
+              '* Tomorrow ' .. ex 'tomorrow_link()',
+            },
+          },
+          c = {
+            description = 'KB component',
+            template = {
+              '#+title: %^{title}',
+              '#+description: %^{description}',
+              '#+filetags: :%^{category}:',
+              '',
+              '* Component %\\1',
+              '',
+              'URL: %?',
+              'CI: ',
+              '',
+              '** How Tos',
+              '',
+            },
+          },
+          i = {
+            description = 'Dir index',
+            template = {
+              '#+title: ' .. ex 'dirname()',
+              '',
+              '* ' .. ex 'dirname()',
+              '** Items',
+              '%?',
+            },
+          },
           p = {
-            description = 'Personal',
+            description = 'Personal quick',
             template = '* %?\n  %u',
-            target = '~/notes/org/personal/personal.org',
+            target = '~/notes/personal/personal.org',
           },
           s = {
-            description = 'SAP',
+            description = 'SAP quick',
             template = '* %?\n  %u',
-            target = '~/notes/org/sap/sap.org',
+            target = '~/notes/sap/sap.org',
           },
         },
       }
 
       -- Experimental LSP support
       vim.lsp.enable 'org'
+
+      -- Capture menu (j/f/d/c/i/p/s)
+      vim.keymap.set('n', '<leader>oc', '<cmd>lua require("orgmode").action("capture.prompt")<CR>', { desc = '[O]rg [C]apture menu' })
 
       -- Note command
       vim.api.nvim_create_user_command('Note', function(opts)
@@ -34,6 +145,23 @@ return {
         end
         vim.cmd('edit ~/notes/' .. name)
       end, { nargs = 1 })
+
+      -- Search
+      --- Search TEXT inside your Org files (Requires ripgrep installed on your system)
+      vim.keymap.set('n', '<leader>os', function()
+        require('telescope.builtin').live_grep {
+          cwd = '~/notes/',
+          prompt_title = 'Search Org Notes Content',
+        }
+      end, { desc = '[O]rg notes [S]earch text' })
+
+      --- Find/Open FILES by name inside your Org directory
+      vim.keymap.set('n', '<leader>of', function()
+        require('telescope.builtin').find_files {
+          cwd = '~/notes/',
+          prompt_title = 'Find Org Files',
+        }
+      end, { desc = '[O]rg file [F]ind' })
     end,
   },
   {

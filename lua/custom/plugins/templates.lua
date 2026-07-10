@@ -65,13 +65,13 @@ local function get_dir_content(path)
   return content
 end
 
--- Get a list of strings and return a list of norg style strings
-local function norg_links_items(lines)
-  local norg_links = {}
+-- Get a list of strings and return a list of org-style link strings
+local function org_links_items(lines)
+  local org_links = {}
   for _, link in ipairs(lines) do
-    table.insert(norg_links, '{' .. link .. '}')
+    table.insert(org_links, '[[' .. link .. ']]')
   end
-  return norg_links
+  return org_links
 end
 
 local function setup()
@@ -93,8 +93,8 @@ local function setup()
   tpl.register('{{_next_working_date_}}', decide_on_next_date)
 
   -- Next two render improperly, `templates` can't render correctly for the life of it
-  tpl.register('{{_norg_linkified_dir_content_}}', function()
-    return table.concat(norg_links_items(get_dir_content(vim.fn.fnamemodify(vim.fn.expand '%:p:h', ':p'))), '\\n')
+  tpl.register('{{_org_linkified_dir_content_}}', function()
+    return table.concat(org_links_items(get_dir_content(vim.fn.fnamemodify(vim.fn.expand '%:p:h', ':p'))), '\\n')
   end)
   tpl.register('{{_dir_content_}}', function()
     return table.concat(get_dir_content(vim.fn.fnamemodify(vim.fn.expand '%:p:h', ':p')), '\\n')

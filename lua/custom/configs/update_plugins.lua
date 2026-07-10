@@ -1,16 +1,5 @@
 local M = {}
 
--- Update all treesitter parsers except norg (known C++ compile issues on macOS)
-local function ts_update_excluding_norg()
-  local installed = require('nvim-treesitter.info').installed_parsers()
-  local to_update = vim.tbl_filter(function(lang)
-    return lang ~= 'norg'
-  end, installed)
-  if #to_update > 0 then
-    vim.cmd('TSUpdate ' .. table.concat(to_update, ' '))
-  end
-end
-
 function M.setup()
   vim.api.nvim_create_user_command('UpdateAllPlugins', function()
     -- Step 1: Lazy sync
@@ -25,7 +14,7 @@ function M.setup()
 
         -- TSUpdate is async, so chain via schedule
         vim.schedule(function()
-          ts_update_excluding_norg()
+          vim.cmd 'TSUpdate'
 
           vim.notify('UpdateAllPlugins: TSUpdate complete. Running MasonToolsUpdate...', vim.log.levels.INFO)
 
