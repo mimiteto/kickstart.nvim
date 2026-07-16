@@ -186,6 +186,68 @@ return {
       vim.keymap.set('n', '<leader>ft', ext.search_tags, { desc = 'Org tags' })
       vim.keymap.set('n', '<leader>r', ext.refile_heading, { desc = 'Org refile' })
       vim.keymap.set('n', '<leader>li', ext.insert_link, { desc = 'Org insert link' })
+
+      -- Link the CURRENT file into an org note under a "NEEDS ORGANISATION" heading.
+      -- Works from any filetype: pick a note in ~/notes via telescope, and the
+      -- path of the file you invoked from gets appended as an org link.
+      local ORG_ORGANISE_HEADING = 'NEEDS ORGANISATION'
+
+      vim.keymap.set('n', '<leader>ol', function()
+        local src = vim.fn.expand '%:p'
+        if src == '' then
+          vim.notify('Current buffer has no file path', vim.log.levels.WARN)
+          return
+        end
+
+        require('telescope.builtin').find_files {
+          cwd = vim.fn.expand '~/notes/',
+          prompt_title = 'Link this file into note',
+          attach_mappings = function(prompt_bufnr, _)
+            local actions = require 'telescope.actions'
+            local state = require 'telescope.actions.state'
+            actions.select_default:replace(function()
+              local entry = state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              if not entry then
+                return
+              end
+              local target = entry.path or entry[1]
+              -- entry.path may be relative to cwd; make absolute.
+              if not target:match '^/' then
+                target = vim.fn.expand '~/notes/' .. target
+              end
+
+              local link = string.format('[[file:%s][%s]]', src, src)
+              local lines = vim.fn.readfile(target)
+
+              -- Find the organise heading (any level).
+              local hidx = nil
+              for i, l in ipairs(lines) do
+                if l:match('^%*+%s+' .. vim.pesc(ORG_ORGANISE_HEADING) .. '%s*$') then
+                  hidx = i
+                  break
+                end
+              end
+
+              if hidx then
+                -- Insert link right after the heading line.
+                table.insert(lines, hidx + 1, '- ' .. link)
+              else
+                -- Append heading + link at end of file.
+                if #lines > 0 and lines[#lines] ~= '' then
+                  table.insert(lines, '')
+                end
+                table.insert(lines, '* ' .. ORG_ORGANISE_HEADING)
+                table.insert(lines, '- ' .. link)
+              end
+
+              vim.fn.writefile(lines, target)
+              vim.notify('Linked into ' .. vim.fn.fnamemodify(target, ':t'), vim.log.levels.INFO)
+            end)
+            return true
+          end,
+        }
+      end, { desc = '[O]rg [L]ink current file into note' })
     end,
   },
   {
