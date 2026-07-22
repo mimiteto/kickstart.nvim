@@ -13,8 +13,8 @@ local rep = require('luasnip.extras').rep
 local snippet_from_nodes = ls.sn
 
 -- Stolen from https://cj.rs/blog/luasnip-and-treesitter-for-smarter-snippets/go.lua
-local ts_locals = require 'nvim-treesitter.locals'
-local ts_utils = require 'nvim-treesitter.ts_utils'
+-- Ported off the removed `nvim-treesitter.locals` / `nvim-treesitter.ts_utils`
+-- modules (gone on the nvim-treesitter `main` branch) to core `vim.treesitter`.
 local get_node_text = vim.treesitter.get_node_text
 
 -- Adapted from https://github.com/tjdevries/config_manager/blob/1a93f03dfe254b5332b176ae8ec926e69a5d9805/xdg_config/nvim/lua/tj/snips/ft/go.lua
@@ -83,15 +83,21 @@ local handlers = {
 
 -- Adapted from https://github.com/tjdevries/config_manager/blob/1a93f03dfe254b5332b176ae8ec926e69a5d9805/xdg_config/nvim/lua/tj/snips/ft/go.lua
 local function go_result_type(info)
-  local cursor_node = ts_utils.get_node_at_cursor()
-  local scope = ts_locals.get_scope_tree(cursor_node, 0)
-
   local function_node
-  for _, v in ipairs(scope) do
-    if v:type() == 'function_declaration' or v:type() == 'method_declaration' or v:type() == 'func_literal' then
-      function_node = v
+  -- Walk up from the node at the cursor to the nearest enclosing function-like
+  -- node (replaces ts_utils.get_node_at_cursor + ts_locals.get_scope_tree).
+  local node = vim.treesitter.get_node()
+  while node do
+    local t = node:type()
+    if t == 'function_declaration' or t == 'method_declaration' or t == 'func_literal' then
+      function_node = node
       break
     end
+    node = node:parent()
+  end
+
+  if not function_node then
+    return { t 'nil' }
   end
 
   local query = vim.treesitter.query.get('go', 'LuaSnip_Result')

@@ -12,11 +12,6 @@ local fmta = require('luasnip.extras.fmt').fmta
 local rep = require('luasnip.extras').rep
 local snippet_from_nodes = ls.sn
 
--- Stolen from https://cj.rs/blog/luasnip-and-treesitter-for-smarter-snippets/go.lua
-local ts_locals = require 'nvim-treesitter.locals'
-local ts_utils = require 'nvim-treesitter.ts_utils'
-local get_node_text = vim.treesitter.get_node_text
-
 return {
   s('p3', {
     t { '#! /usr/bin/env python3', '', '"""' },

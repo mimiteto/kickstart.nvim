@@ -345,6 +345,10 @@ return { -- LSP Plugins
       require('mason-tool-installer').setup {
         ensure_installed = {
           'stylua', -- Used to format Lua code
+          -- Provides the `tree-sitter` binary that nvim-treesitter's `main`
+          -- branch needs to compile parsers. Installed via Mason (whose bin dir
+          -- is on nvim's PATH) so a fresh machine bootstraps with only `nvim`.
+          'tree-sitter-cli',
           'jq',
           'actionlint',
           'alex',
