@@ -148,20 +148,20 @@ return {
 
       -- Search
       --- Search TEXT inside your Org files (Requires ripgrep installed on your system)
-      vim.keymap.set('n', '<leader>os', function()
+      vim.keymap.set('n', '<leader>osn', function()
         require('telescope.builtin').live_grep {
           cwd = '~/notes/',
           prompt_title = 'Search Org Notes Content',
         }
-      end, { desc = '[O]rg notes [S]earch text' })
+      end, { desc = '[O]rg [S]earch text in [N]otes' })
 
       --- Find/Open FILES by name inside your Org directory
-      vim.keymap.set('n', '<leader>of', function()
+      vim.keymap.set('n', '<leader>ofn', function()
         require('telescope.builtin').find_files {
           cwd = '~/notes/',
-          prompt_title = 'Find Org Files',
+          prompt_title = 'Find Org Files ',
         }
-      end, { desc = '[O]rg file [F]ind' })
+      end, { desc = '[O]rg file [F]ind in [N]otes' })
     end,
   },
   {
@@ -182,8 +182,8 @@ return {
       require('telescope').load_extension 'orgmode'
 
       local ext = require('telescope').extensions.orgmode
-      vim.keymap.set('n', '<leader>fh', ext.search_headings, { desc = 'Org headlines' })
-      vim.keymap.set('n', '<leader>ft', ext.search_tags, { desc = 'Org tags' })
+      vim.keymap.set('n', '<leader>ofh', ext.search_headings, { desc = '[O]rg [F]ind headlines' })
+      vim.keymap.set('n', '<leader>oft', ext.search_tags, { desc = '[O]rg [F]ind [T]ags' })
       vim.keymap.set('n', '<leader>r', ext.refile_heading, { desc = 'Org refile' })
       vim.keymap.set('n', '<leader>li', ext.insert_link, { desc = 'Org insert link' })
 
