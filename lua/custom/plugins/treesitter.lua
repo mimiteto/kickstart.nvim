@@ -87,26 +87,55 @@ return {
         })
       end
 
+      -- Enable highlighting per-buffer, and auto-install a missing parser on
+      -- first open (restores the old `auto_install = true`, which `main` drops).
+      local function start_treesitter(buf)
+        local ft = vim.bo[buf].filetype
+        if ft == '' then
+          return
+        end
+
+        -- Resolve filetype -> treesitter language.
+        local lang = vim.treesitter.language.get_lang(ft) or ft
+
+        local nts = require 'nvim-treesitter'
+        local installed = nts.get_installed()
+        if not vim.tbl_contains(installed, lang) then
+          -- Only attempt langs treesitter actually ships a parser for, and only
+          -- when the CLI is present, so we don't spam errors on a fresh machine.
+          if vim.fn.executable 'tree-sitter' == 1 and vim.tbl_contains(nts.get_available(), lang) then
+            nts.install({ lang }, { summary = true }):await(function(err)
+              -- Re-run once installed so highlighting turns on without a reopen.
+              if not err and vim.api.nvim_buf_is_valid(buf) then
+                vim.schedule(function()
+                  start_treesitter(buf)
+                end)
+              end
+            end)
+          end
+          return
+        end
+
+        -- Enable treesitter highlighting; guard so a broken parser never aborts.
+        local ok = pcall(vim.treesitter.start, buf, lang)
+        if not ok then
+          return
+        end
+
+        if regex_highlight_fts[ft] then
+          -- Keep Vim's regex highlighting alongside treesitter (some langs,
+          -- e.g. ruby, rely on it for indent rules).
+          vim.bo[buf].syntax = 'on'
+        else
+          -- Experimental treesitter-based indentation (skip regex-indent fts).
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end
+
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('custom_treesitter_start', { clear = true }),
         callback = function(args)
-          local ft = vim.bo[args.buf].filetype
-
-          -- Enable treesitter highlighting; guard so a missing/broken parser
-          -- never aborts the FileType handler.
-          local ok = pcall(vim.treesitter.start, args.buf)
-          if not ok then
-            return
-          end
-
-          if regex_highlight_fts[ft] then
-            -- Keep Vim's regex highlighting alongside treesitter (some langs,
-            -- e.g. ruby, rely on it for indent rules).
-            vim.bo[args.buf].syntax = 'on'
-          else
-            -- Experimental treesitter-based indentation (skip regex-indent fts).
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          end
+          start_treesitter(args.buf)
         end,
       })
     end,

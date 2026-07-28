@@ -226,9 +226,10 @@ return { -- LSP Plugins
               constantValues = true,
               parameterNames = true,
             },
-            annotations = {
-              vulncheck = 'Imports',
-            },
+            -- `vulncheck` is a top-level string enum ("Off"|"Imports"|"Prompt").
+            -- `annotations` is a separate object of booleans (bounds/escape/
+            -- inline/nil) — nesting vulncheck inside it is a schema error.
+            vulncheck = 'Imports',
             analyses = {
               QF1001 = true,
               QF1010 = true,
