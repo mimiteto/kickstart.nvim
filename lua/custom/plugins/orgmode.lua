@@ -16,7 +16,19 @@ return {
       require('orgmode').setup {
         org_agenda_files = { '~/notes/**/*.org' },
         org_default_notes_file = '~/notes/notes.org',
-        org_todo_keywords = { 'TODO(t)', 'ONGOING(o)', 'PENDING(p)', 'FIX(f)', '|', 'DONE(d)', 'CANCELED(c)', 'DELEGATED(e)' },
+        org_todo_keywords = {
+          'TODO(t)',
+          'ONGOING(o)',
+          'ONGOING-AGENTS(a)',
+          'PENDING(p)',
+          'FIX(f)',
+          '|',
+          'DONE(d)',
+          'CANCELED(c)',
+          'DELEGATED(e)',
+          'MISSPLACED(m)',
+          'READ(r)',
+        },
         org_capture_templates = {
           j = {
             description = 'Journal — workday',
