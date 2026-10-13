@@ -22,6 +22,7 @@ return {
           'ONGOING-AGENTS(a)',
           'PENDING(p)',
           'FIX(f)',
+          'DAILY-SYNC-TOPIC(s)',
           '|',
           'DONE(d)',
           'CANCELED(c)',
